@@ -68,3 +68,7 @@ git push --force
 git config --global user.date "default"
 
 Write-Host "$CantidadCommits commits realizados con fecha $Fecha y subidos correctamente."
+
+
+
+# .\auto-commit.ps1 -CantidadCommits 04 -Fecha "2025-01-15"
