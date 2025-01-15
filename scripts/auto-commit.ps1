@@ -48,8 +48,8 @@ git add .
 # Bucle para hacer múltiples commits en la misma fecha
 for ($i = 0; $i -lt $CantidadCommits; $i++) {
     # Realiza el commit con la fecha proporcionada y el mensaje
-    $env:GIT_AUTHOR_DATE = "$($Fecha)T12:00:00"
-    $env:GIT_COMMITTER_DATE = "$($Fecha)T12:00:00"
+    $env:GIT_AUTHOR_DATE = "$($Fecha)T08:15:24"
+    $env:GIT_COMMITTER_DATE = "$($Fecha)T08:15:24"
 
     git commit -m "$Mensaje $($i + 1)"
 
