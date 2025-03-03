@@ -1,6 +1,6 @@
 param(
     [string]$Fecha,
-    [string]$Mensaje = "Commit automático para llenar el verde de GitHub",
+    [string]$Mensaje = "Version Bump",
     [string]$ArchivoContador = "contador.txt"  # Archivo donde modificaremos el contador
 )
 
