@@ -1,6 +1,7 @@
 param(
     [string]$Fecha,
-    [string]$Mensaje = "Version Bump",
+    [string]$Mensaje = "version bump",
+    [int]$CantidadCommits = 1,  # Número de commits a hacer
     [string]$ArchivoContador = "contador.txt"  # Archivo donde modificaremos el contador
 )
 
@@ -44,11 +45,21 @@ Set-Content -Path $ArchivoContador -Value $contador
 # Añade todos los cambios al staging
 git add .
 
-# Realiza el commit con la fecha proporcionada y el mensaje
-$env:GIT_AUTHOR_DATE = "$($Fecha)T12:00:00"
-$env:GIT_COMMITTER_DATE = "$($Fecha)T12:00:00"
+# Bucle para hacer múltiples commits en la misma fecha
+for ($i = 0; $i -lt $CantidadCommits; $i++) {
+    # Realiza el commit con la fecha proporcionada y el mensaje
+    $env:GIT_AUTHOR_DATE = "$($Fecha)T12:00:00"
+    $env:GIT_COMMITTER_DATE = "$($Fecha)T12:00:00"
 
-git commit -m "$Mensaje"
+    git commit -m "$Mensaje $($i + 1)"
+
+    # Añade un cambio (por ejemplo, incrementando el contador en el archivo) para asegurarse de que haya una modificación
+    $contador++
+    Set-Content -Path $ArchivoContador -Value $contador
+
+    # Añade el archivo modificado al staging antes del siguiente commit
+    git add .
+}
 
 # Empuja el commit con la fecha modificada
 git push --force
@@ -56,6 +67,4 @@ git push --force
 # Restablece la fecha global para que los siguientes commits sean normales
 git config --global user.date "default"
 
-Write-Host "Commit realizado con fecha $Fecha y subido correctamente."
-
-
+Write-Host "$CantidadCommits commits realizados con fecha $Fecha y subidos correctamente."
