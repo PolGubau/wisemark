@@ -1,7 +1,9 @@
 param(
     [string]$Fecha,
-    [string]$Mensaje = "Commit para llenar el verde de GitHub"
+    [string]$Mensaje = "Commit automático para llenar el verde de GitHub",
+    [string]$ArchivoContador = "contador.txt"  # Archivo donde modificaremos el contador
 )
+
 # Verifica que se haya proporcionado la fecha
 if (-not $Fecha) {
     Write-Host "Debes proporcionar la fecha en formato 'YYYY-MM-DD'."
@@ -15,19 +17,38 @@ if (-not $gitPath) {
     exit 1
 }
 
+# Asegura que estamos en la rama correcta (puedes ajustar esto si usas una rama distinta de 'main')
+$branch = git rev-parse --abbrev-ref HEAD
+if ($branch -ne "main") {
+    Write-Host "Te encuentras en la rama '$branch', cambiando a 'main'..."
+    git checkout main
+}
+
+# Verifica si el archivo de contador existe
+if (-not (Test-Path $ArchivoContador)) {
+    # Si no existe el archivo, creamos uno
+    Write-Host "El archivo '$ArchivoContador' no existe, creándolo..."
+    Set-Content -Path $ArchivoContador -Value "0"
+}
+
+# Lee el contador actual
+$contador = Get-Content -Path $ArchivoContador | Out-String
+$contador = [int]$contador.Trim()
+
+# Incrementa el contador
+$contador++
+
+# Escribe el nuevo valor del contador en el archivo
+Set-Content -Path $ArchivoContador -Value $contador
 
 # Añade todos los cambios al staging
 git add .
 
-# Realiza el commit
-git commit -m $Mensaje
+# Realiza el commit con la fecha proporcionada y el mensaje
+$env:GIT_AUTHOR_DATE = "$($Fecha)T12:00:00"
+$env:GIT_COMMITTER_DATE = "$($Fecha)T12:00:00"
 
-# Modifica la fecha del commit para que coincida con el día indicado
-$env:GIT_AUTHOR_DATE = "$Fecha 09:00:00"
-$env:GIT_COMMITTER_DATE = "$Fecha 09:00:00"
-
-# Modifica el último commit
-git commit --amend --no-edit
+git commit -m "$Mensaje"
 
 # Empuja el commit con la fecha modificada
 git push --force
