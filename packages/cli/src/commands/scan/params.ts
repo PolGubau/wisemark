@@ -2,15 +2,16 @@ import type { Command } from "cac";
 
 export function addScanFilters(command: Command) {
 	command
-		.option("--type <type>", "Filtra por tipo (@todo, @note...)")
-		.option("--path <path>", "Path a escanear")
-		.option("--severity <severity>", "Filtra por severidad (low, medium, high)")
-		.option("--json", "Devuelve la salida en formato JSON")
-		.option(
-			"--tags <tags>",
-			"Filtra por tags separados por coma (bug,refactor)",
-		)
-		.option("--cwd <path>", "Path base para escanear", {
+		.option("--type <type>", "Filter by type (todo, note, fixme)")
+		.option("--path <path>", "Inner path of the project to scan", {
+			default: ".",
+		})
+		.option("--severity <severity>", "Filter by severity (low, medium, high)")
+		.option("--json", "Return output in JSON format")
+		.option("--withDueDate", "Return only comments with a due date")
+		.option("--due <date>", "Filter by due date (YYYY-MM-DD)")
+		.option("--tags <tags>", "Filter by tags (comma separated)")
+		.option("--cwd <path>", "Path to the project", {
 			default: process.cwd(),
 		});
 }

@@ -1,5 +1,6 @@
 import type { Comment, Type } from "@wisemark/core";
 import pc from "picocolors";
+import { printComment } from "./prints/printComment";
 
 const typeColor: Record<Type, (x: string) => string> = {
 	note: pc.blue,
@@ -8,20 +9,18 @@ const typeColor: Record<Type, (x: string) => string> = {
 	question: pc.cyan,
 };
 
-export function printResults(comments: Comment[], time: number) {
+export function printResults(comments: Comment[], milliseconds: number) {
 	if (comments.length === 0) {
-		console.log(pc.green(`✅ No wisemark comments found in ${time}ms`));
+		console.log(pc.green(`✅ No wisemark comments found in ${milliseconds}ms`));
 		return;
 	}
 
 	for (const c of comments) {
 		const color = typeColor[c.type] ?? ((x: string) => x);
-		console.log(
-			`${color(`[${c.type.toUpperCase()}]`)} ${pc.bold(c.message)}\n  ↪ ${pc.gray(c.filePath)}:${pc.yellow(c.line.toString())}${c.id ? ` ${pc.magenta(`#${c.id}`)}` : ""}${c.severity ? ` ${pc.red(`(${c.severity})`)}` : ""}${c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : ""}`,
-		);
+		printComment(c, color);
 	}
 	console.log(`\n
-${pc.green(`✅ Found ${comments.length} wisemark comments in ${time}ms`)}
+${pc.green(`✅ Found ${comments.length} wisemark comments in ${milliseconds}ms`)}
 	
 `);
 }

@@ -18,10 +18,13 @@ export async function scanProject(basePath: string): Promise<Comment[]> {
 			const content = await readFile(file, "utf-8");
 			//  @fixme change that to a function that will parse the content and return the comments -- severity:low
 			const comments = parseComments(content, file);
-			//  @question Should I use the file name as the id? -- severity:low tags:help
 			results.push(...comments);
 		}),
 	);
 
 	return results;
 }
+
+// @note PASSED DATE -- due:2023-10-01
+// @note TODAY -- due:2025-04-16
+// @note FUTURE -- due:2027-10-01
