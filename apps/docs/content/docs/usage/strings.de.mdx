@@ -1,0 +1,112 @@
+---
+title: Grundlegende Zeichenketten  
+description: Einfaches Beispiel mit der fuzzy-Bibliothek
+---
+
+## Zusammenfassung
+Dies ist ein einfaches Beispiel für die Verwendung der fuzzy-Bibliothek mit einem Array von Zeichenketten. Es ist ein Basisfall, da keine zwingenden Optionen erforderlich sind.
+
+Hauptsächlich musst du den Parameter `collection` angeben, also das Array von Strings, in dem du suchen möchtest.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+
+const fuzzySearch = fuzzy(list)
+```
+
+Dann kannst du die Funktion `fuzzySearch` verwenden, um einen String im Array zu suchen. Die Funktion gibt ein Objekt mit den Ergebnissen zurück.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+function fuzzySearch(query:string):{
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+
+// ---cut---
+const query = "volvo";
+
+const result = fuzzySearch(query)
+console.log(result)
+```
+
+## Referenzen
+### Antwort
+Das Ergebnis ist ein Objekt mit folgenden Eigenschaften:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Ergebnisse
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />
+
+## Einfaches Beispiel
+Du kannst mit `fuzzySearch` einen String suchen. Die Funktion liefert ein Ergebnisobjekt.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+const fuzzySearch = fuzzy(list)
+
+const query = "volvo"; // Beliebiger Suchbegriff
+const result = fuzzySearch(query)
+
+console.log(result)
+```
+
+Du kannst auch `fuzzy` und `fuzzySearch` in einer einzigen Zeile kombinieren.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+const users = ["Peter", "Paul", "Pol", "Pauline", "Paulette", "Pau"]
+const query = "Pol";
+const fuzzySearch = fuzzy(users)(query)
+console.log(fuzzySearch)
+```

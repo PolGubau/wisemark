@@ -1,0 +1,67 @@
+---
+title: Objekt-Array
+description: Fuzzy-Suche in einem Array von Objekten
+---
+
+## Elemente in einer Objektliste finden
+
+### Nach direkter Eigenschaft
+Wenn du nach einem **direkten Schlüssel eines Objekts** filtern möchtest, verwende die Option `key`.
+
+```ts title="index.ts"
+const liste = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+]
+
+const fuzzySearch = fuzzy(liste, {
+  key: 'name',
+})
+```
+
+### Nach verschachtelter Eigenschaft
+Wenn du nach einer verschachtelten Eigenschaft suchst, nutze `getKey`.
+
+```ts title="index.ts"
+const liste = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(liste, {
+  getKey: (item) => [item.owner.fullname],
+})
+```
+
+### Nach mehreren Eigenschaften
+Um nach mehreren Eigenschaften gleichzeitig zu filtern, verwende `getKey`.
+
+```ts title="index.ts"
+const liste = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(liste, {
+  getKey: (item) => [item.name, item.owner.fullname],
+})
+```
+Für weitere Beispiele siehe die **Beispiele**-Sektion.
+ 
+
+## Referenzen
+
+### Optionen
+Die Eigenschaften von fuzzy sind die folgenden: 
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyOptions" />
+
+### Antwort
+Das Ergebnis wird ein Objekt mit den folgenden Eigenschaften sein:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Ergebnisse
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />
+

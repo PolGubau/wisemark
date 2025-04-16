@@ -1,0 +1,57 @@
+---
+title: Primeros pasos
+description: Introducción a @polgubau/fuzzy
+---
+
+## Instalación
+
+Instala la librería usando tu gestor de paquetes favorito:
+```package-install
+npm i @polgubau/fuzzy
+```
+
+<Accordions type="single">
+  <Accordion title="¿Usando CDN?" value="cdn" id="cdn">
+  Para usar la librería vía CDN, incluye el siguiente script en tu HTML:
+  ```html title="index.html"
+<script src="https://cdn.jsdelivr.net/npm/@polgubau/fuzzy"></script>
+```
+   </Accordion>
+</Accordions>
+
+## Uso básico
+
+Importa la librería y úsala con una lista simple:
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+import fuzzy from '@polgubau/fuzzy';
+
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+const queryText = "volv"; // El término de búsqueda
+const fuzzySearch = fuzzy(list);
+
+// Ejecuta esto cada vez que cambie el término de búsqueda
+const fuzzedList = fuzzySearch(queryText);
+console.log(fuzzedList);
+```
+
+<Callout title="¿Usando un framework?"> Si usas React o Vue, tenemos hooks y componentes especiales para ti. Consulta las pestañas de Frameworks para más información.</Callout>
+
+
+## Estructura de respuesta
+Este código devuelve la lista de resultados junto con varias métricas sobre la búsqueda.
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+ 
+ 

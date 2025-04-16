@@ -1,0 +1,66 @@
+---
+title: Array de objetos
+description: Búsqueda  en un array de objetos
+---
+
+## Buscar elementos en una lista de objetos
+
+### Por propiedad directa
+Si quieres filtrar por una **clave directa de un objeto**, puedes usar la opción `key`.
+
+```ts title="index.ts"
+const lista = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+]
+
+const fuzzySearch = fuzzy(lista, {
+  key: 'name',
+})
+```
+
+### Por propiedad anidada
+Si quieres filtrar por una propiedad anidada, usa la opción `getKey`.
+
+```ts title="index.ts"
+const lista = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(lista, {
+  getKey: (item) => [item.owner.fullname],
+})
+```
+
+### Por múltiples propiedades
+Puedes filtrar por varias propiedades combinadas con `getKey`.
+
+```ts title="index.ts"
+const lista = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(lista, {
+  getKey: (item) => [item.name, item.owner.fullname],
+})
+```
+Para más ejemplos, consulta la sección de **Ejemplos**.
+
+## Referencias
+
+### Opciones
+Las propiedades de fuzzy son las siguientes: 
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyOptions" />
+
+### Respuesta
+El resultado será un objeto con las siguientes propiedades:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Resultados
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />
+

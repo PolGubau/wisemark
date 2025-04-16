@@ -1,0 +1,111 @@
+---
+title: React Notizen-Finder
+description: Erstellen Sie eine einfache Notizen-App mit Fuzzy-Suche mit React.
+---
+
+## Zusammenfassung
+In diesem Beispiel erstellen wir eine einfache Notizen-App mit der Fuzzy-Bibliothek. Die App ermöglicht die Suche nach Notizen nach Titel oder Inhalt.
+
+<Steps>
+<Step>
+### React-Projekt erstellen
+```bash title="bash"
+pnpm create vite@latest notes-finder --template react-ts
+cd notes-finder
+pnpm install
+```
+</Step>
+<Step>
+### Fuzzy-Bibliothek installieren
+```bash title="bash"
+pnpm add @polgubau/fuzzy
+```
+</Step>
+<Step>
+### Erstellen Sie eine Datei mit Notizen
+Erstellen Sie eine Datei mit dem Namen `notes.ts` im Ordner `src` und fügen Sie den folgenden Code hinzu:
+```ts title="src/notes.ts"
+export const notes = [
+  {id: 1, title: "Nuxt.js üben", content: "Erfahren Sie, wie Sie Nuxt.js für serverseitiges Rendering verwenden."},
+  {id: 2, title: "Eine To-Do-App erstellen", content: "Erstellen Sie eine einfache To-Do-App mit React und TypeScript."},
+  {id: 3, title: "TypeScript lernen", content: "Verstehen Sie die Grundlagen von TypeScript und seine Funktionen."},
+  {id: 4, title: "React Router erkunden", content: "Lernen Sie, wie Sie React Router für die Navigation in React-Anwendungen verwenden."},
+  {id: 5, title: "Redux studieren", content: "Verstehen Sie, wie Sie den Zustand mit Redux verwalten."},
+
+];
+```
+</Step>
+<Step>
+### Suchkomponente erstellen
+Erstellen Sie eine Datei mit dem Namen `Search.tsx` im Ordner `src` und fügen Sie den folgenden Code hinzu:
+
+```tsx title="src/Search.tsx"
+  import { useState } from "react";
+  import { Highlight, useFuzzy } from "@polgubau/fuzzy/react";
+	import { notes } from "./notes";
+
+  const Search: React.FC = () => {
+	const [query, setQuery] = useState("");
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setQuery(e.target.value);
+	};
+
+	const filteredList = useFuzzy({
+		list: notes,
+		// Wenn `query` leer ist, wird `notes` unverändert zurückgegeben.
+		query,
+		// `getKey` wird verwendet, um den Schlüssel jedes Elements in der Liste zu extrahieren, das für die Suche verwendet werden soll.
+		getKey: (item) => [item.title, item.content],
+	});
+
+	return (
+		<div>
+			<input
+				className="border-2 border-fd-foreground dark:bg-fd-accent rounded-lg w-full p-2 mb-4"
+				type="search"
+				value={query}	
+				onChange={handleChange}
+				placeholder="Notizen suchen..."
+			/>
+			<ul>
+				{filteredList.map(({ item, _score, matches: [nameRanges, contentRanges] }) => (
+					<li key={item.id}>
+						<h3>
+							<Highlight text={item.title} ranges={nameRanges} />
+						</h3>
+						<p>
+							<Highlight text={item.content} ranges={contentRanges} />
+						</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+  ```
+</Step>
+<Step>
+
+### Haupt-App-Komponente erstellen
+Erstellen Sie eine Datei namens `App.tsx` im Ordner `src` und fügen Sie folgenden Code hinzu:
+
+```tsx title="src/App.tsx"
+  import React from "react";
+  import Search from "./Search";
+  import "./App.css";
+  const App: React.FC = () => {
+    return (
+      <div className="App">
+        <h1>Notizen-Finder</h1>
+        <Search />
+      </div>
+    );
+  };
+  export default App;
+  ```
+</Step>
+</Steps>
+
+## Resultado
+<ExampleNotesSearchDisplay/>

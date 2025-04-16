@@ -1,0 +1,56 @@
+---
+title: Pas a pas
+description: Entenent com fer servir la llibreria i la seva API.
+---
+
+## Ús pas a pas
+<Steps>
+  <Step>
+  ### Importa la llibreria
+
+  ```ts
+  import fuzzy from '@polgubau/fuzzy';
+  ```
+  </Step>
+
+  <Step>
+  ### Crea una llista d'elements per cercar
+  ```ts twoslash
+  const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+  ```
+  En aquest exemple usem una llista de cadenes però **també pots fer servir altres tipus de dades**.
+  </Step>
+
+  <Step>
+  ### Crea una funció de cerca
+  ```ts
+  const fuzzySearch = fuzzy(list);
+  ```
+  Aquesta funció es farà servir per cercar a la llista.
+  </Step>
+
+  <Step>
+  ### Crida la funció de cerca
+  ```ts twoslash
+  // @noErrors
+  const queryText: string = "vol"; // Terme de cerca
+  const results = [{ item: "volvo", score: 0.9, matches: [0,3] }]
+
+  // ---cut---
+  const results = fuzzySearch(queryText);
+  ```
+  Això retornarà els resultats segons el terme introduït.
+  Crida aquesta funció cada cop que canvii el terme.
+  </Step>
+
+  <Step>
+  ### Fes servir els resultats
+  ```ts twoslash 
+  const results = [{ item: "volvo", score: 0.9, matches: [0,3] }]
+  // ---cut---
+  console.log(results);
+  /* Exemple de sortida: [{ item: "volvo", score: 0.9, matches: [0,3] }] */
+  ```
+  Els resultats inclouen l'element trobat, la puntuació i les posicions on coincideix.
+  </Step>
+</Steps>

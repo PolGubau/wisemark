@@ -1,0 +1,71 @@
+---
+title: Objects array  
+description: Fuzzy finding in objects array
+---
+
+## Finding items in a list of objects
+
+### By direct property
+If you want to filter by a **direct key of an object**, you can use the `key` option.
+
+```ts title="index.ts"
+const list = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+]
+
+const fuzzySearch = fuzzy(list, {
+  // search by `name` property as it's not nested
+  key: 'name',
+})
+```
+
+### By nested property
+If you want to filter by a nested property of an object, you can use the `getKey` option.
+
+```ts title="index.ts"
+const list = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(list, {
+  // search by `owner.fullname` property (John Doe as example)
+  getKey: (item) => [item.owner.fullname],
+})
+```
+
+### By multiple properties
+If you want to filter by multiple properties of an object, you can use the `getKey` option. 
+
+```ts title="index.ts"
+const list = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(list, {
+  // search by `name` and `owner.fullname` properties (John Doe as example)
+  getKey: (item) => [item.name, item.owner.fullname],
+})
+```
+
+For further examples check the **Examples** section.
+
+
+## References
+
+### Options
+The options object can have the following properties:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyOptions" />
+
+### Response
+The result will be an object with the following properties:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Results
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />
+

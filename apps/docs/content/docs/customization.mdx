@@ -1,0 +1,129 @@
+---
+title: Customization
+description: Customizing the behavior of the library.
+---
+
+## Fuzzy List Options
+
+To customize the search behavior, provide an options object with the following parameters:
+
+```ts title="index.ts"
+const fuzzySearch = fuzzy(list, {
+  key: "name", // Property to search in the items
+  getKey: (item) => [item.name, item.author.fullname], // Search multiple properties
+  debug: true, // Enable debugging
+  limit: 10, // Max number of results
+  maxScore: 2.5, // Max score threshold for results
+  mapResult: (item) => item, // Transform the result item
+});
+```
+
+### `key` and `getKey`
+
+If the dataset consists of objects, use `key` or `getKey` to specify which properties to search in.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Result<T>[];
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: Result<T> | null;
+  hasResults: boolean;
+};
+
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+
+const list = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+  { name: "audi", year: 2022 },
+  { name: "bmw", year: 2023 },
+];
+
+const fuzzySearch = fuzzy(list, {
+  key: "name"
+});
+
+const fuzzedList = fuzzySearch("volv");
+console.log(fuzzedList);
+```
+
+Similarly, `getKey` allows searching across multiple or nested properties.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const list = [
+  { name: "volvo", owner: { fullname: "John Doe" } },
+  { name: "seat", owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", owner: { fullname: "John Smith" } },
+];
+
+const fuzzySearch = fuzzy(list, {
+  getKey: (item) => [item.owner.fullname, item.name],
+});
+```
+
+### `limit` Option
+
+Limits the number of search results returned. Useful for optimizing UI rendering.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  limit: 5,
+});
+```
+
+The result set will contain a maximum of **5** items.
+
+### `maxScore` Option
+
+Filters results by score, which represents the distance from an exact match.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  maxScore: 2, // Exclude results with a score above 2
+});
+```
+
+#### Sorting Behavior
+When using both `limit` and `maxScore`, results are first filtered by score, then truncated to the `limit`.
+
+### `debug` Option
+
+Enables logging of search execution details in the **console**.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes"], {
+  debug: true,
+});
+```
+
+### `mapResult` Option
+
+Transforms result items before returning them.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  mapResult: (item) => item.toUpperCase(),
+});
+
+const result = fuzzySearch("volvo");
+console.log(result.results[0].item); // "VOLVO"
+```
+
+#### TypeScript Generics
+The library uses two generics: one for input type (list items) and another for output type (result items). If `mapResult` is used, the output type adapts accordingly.
+
+```ts twoslash title="index.ts"
+// @noErrors
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+```
+

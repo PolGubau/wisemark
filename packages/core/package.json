@@ -1,0 +1,28 @@
+{
+  "name": "@wisemark/core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
+  "exports": {
+    ".": {
+      "browser": "./dist/browser/core.production.mjs",
+      "types": "./dist/esm/index.d.mts",
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/core/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [],
+  "author": "Pol Gubau Amores",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "vitest": "^3.1.1",
+    "tsup": "8.4.0"
+  }
+}

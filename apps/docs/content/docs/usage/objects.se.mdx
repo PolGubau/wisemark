@@ -1,0 +1,65 @@
+---
+title: Array d'objectes
+description: Cerca dins d'un array d'objectes
+---
+
+## Buscar elements en una llista d'objectes
+
+### Per propietat directa
+Si vols filtrar per una **clau directa d'un objecte**, pots fer servir l'opció `key`.
+
+```ts title="index.ts"
+const llista = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+]
+
+const fuzzySearch = fuzzy(llista, {
+  key: 'name',
+})
+```
+
+### Per propietat imbricada
+Si vols filtrar per una propietat imbricada, utilitza `getKey`.
+
+```ts title="index.ts"
+const llista = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(llista, {
+  getKey: (item) => [item.owner.fullname],
+})
+```
+
+### Per múltiples propietats
+També pots filtrar per múltiples propietats combinades amb `getKey`.
+
+```ts title="index.ts"
+const llista = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(llista, {
+  getKey: (item) => [item.name, item.owner.fullname],
+})
+```
+Per més exemples, consulta la secció d'**Exemples**.
+## Referències
+
+### Opcions
+Les propietats de fuzzy són les següents: 
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyOptions" />
+
+### Resposta
+El resultat serà un objecte amb les següents propietats:
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Resposta
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />
+

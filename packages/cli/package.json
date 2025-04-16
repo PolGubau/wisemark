@@ -1,0 +1,25 @@
+{
+  "name": "@wisemark/cli",
+  "bin": {
+    "wisemark": "./dist/bin.js",
+    "wmk": "./dist/bin.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@wisemark/core": "workspace:*",
+    "cac": "^6.7.14",
+    "fast-glob": "^3.3.3",
+    "picocolors": "^1.1.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsup": "8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.1.1"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "@polgubau/fuzzy",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [
+    "typescript",
+    "fuzzy",
+    "polgubau",
+    "polgubau/fuzzy"
+  ],
+  "author": "Pol Gubau Amores <gubaupol@gmail.com> (https://polgubau.com)",
+  "maintainers": [
+    {
+      "name": "Pol Gubau Amores",
+      "email": "gubaupol@gmail.com"
+    }
+  ],
+  "contributors": [
+    "Pol Gubau Amores <gubaupol@gmail.com> (https://polgubau.com)"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "dev": "pnpm run /^dev:.*/",
+    "dev:lib": "cd packages/fuzzy && pnpm build:watch",
+    "dev:app": "cd apps/docs && pnpm dev",
+    "build:lib": "cd packages/fuzzy && pnpm build",
+    "build": "pnpm -r build",
+    "prepare": "husky install",
+    "lint-staged": "cd packages/fuzzy && pnpm lint-fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PolGubau/fuzzy.git"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/PolGubau/fuzzy/issues"
+  },
+  "homepage": "https://github.com/PolGubau/fuzzy#readme",
+  "description": "",
+  "devDependencies": {
+    "@changesets/cli": "^2.29.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0"
+  }
+}

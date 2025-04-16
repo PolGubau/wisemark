@@ -1,0 +1,16 @@
+{
+  "root": true,
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "whyYouNeed",
+    "get-started",
+    "customization",
+    "usage",
+    "---Frameworks---",
+    "react",
+    "vue",
+    "---Exemples---",
+    "tutorials"
+  ]
+}

@@ -1,0 +1,222 @@
+---
+title: Fuzzy en React
+description: Simplifica el teu codi de React amb aquestes utilitats.
+---
+
+## Resum
+
+Pots fer servir aquesta llibreria en React **igual que en un projecte JavaScript normal**, però proporcionem ajudes addicionals per facilitar la integració.
+
+Les diferències clau són:
+- Ús intern de `useMemo` i `useCallback` per a memòria cau
+- Una `API` més intuïtiva dissenyada específicament per a React
+
+Els conceptes principals són `useFuzzy` i `Highlight`.
+
+## Exemple bàsic
+
+Amb només **unes poques línies de codi**, pots implementar un fuzzy finder que retorna resultats coincidents i **ressalta els caràcters coincidents**:
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react' // Nota: ara s'importa des de /react
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+
+<Callout title="Per què importem des de `/react`?">
+És una convenció per separar la llibreria base de la de React. Així pots fer servir la llibreria base amb altres frameworks o JavaScript pur. El codi queda més net i el bundle més lleuger.
+</Callout>
+
+## API
+
+### `useFuzzy`
+
+Aquest és el hook principal, que proporciona una manera optimitzada de cercar elements.
+
+Accepta les mateixes props que la [funció `fuzzy`](/get-started), més algunes opcions addicionals:
+
+1. list - La llista d'elements a cercar. <small>Obligatori</small>.
+2. query - El text a cercar. <small>Obligatori</small>.
+
+<Callout>
+Ara només cal un pas, no cal crear la funció `fuzzy` i després cridar-la. Pots fer servir directament `useFuzzy` i s'encarrega de tot.
+</Callout>
+
+### Totes les opcions de `useFuzzy`
+
+```tsx title="App.tsx"
+const filteredList = useFuzzy({
+  list, // obligatori, la llista d'elements a cercar
+  query, // obligatori, la consulta (si està buida retorna tots els elements)
+  key: "name", // opcional, clau si els ítems són objectes
+  getKey: (item) => [item.name, item.description], // opcional, pot ser una funció o múltiples claus
+  mapResult: (item) => ( item ),  // funció de mapeig personalitzada
+  debug: true, // opcional, si és true mostra la consola
+  limit: 10, // opcional, màxim de resultats
+  maxScore: 0.5, // opcional, puntuació màxima
+})
+```
+
+### Highlight
+
+Aquest és un component d'ajuda que ressalta els caràcters coincidents del text.
+
+El podries crear tu mateix, però l'incloem per comoditat.
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+					<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+#### Propietats de Highlight
+
+<AutoTypeTable path="./src/types/lib.ts" name="HighlightProps" />
+
+
+## Exemples
+
+### Cerca estàtica de strings
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+
+### Cerca de strings des d'un input
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches }) => (
+					<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+
+### Cerca d'objectes per una clau
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = [
+		{ name: "volvo", country: "sweden" },
+		{ name: "seat", country: "spain" },
+		{ name: "mercedes", country: "germany" },
+		{ name: "ford", country: "usa" },
+		{ name: "toyota", country: "japan" }
+	];
+
+	// Cerca per nom
+	const { results } = useFuzzy({ list, query, key: "name" });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches }) => (
+					<li key={item.name}>
+						<Highlight text={item.name} ranges={matches[0]} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+
+### Cerca d'objectes per múltiples claus
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = [
+		{ name: "volvo", country: "sweden" },
+		{ name: "seat", country: "spain" },
+		{ name: "mercedes", country: "germany" },
+		{ name: "ford", country: "usa" },
+		{ name: "toyota", country: "japan" }
+	];
+
+	// Cerca per nom i país
+  // El valor de `key` no es fa servir ja que s'usa `getKey`
+	const { results } = useFuzzy({ list, query, getKey: (item) => [item.name, item.country] });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches: [nameMatch, countryMatch] }) => (
+					<li key={item.name}>
+						<p>Nom: <Highlight text={item.name} ranges={nameMatch} /></p>
+						<p>País: <Highlight text={item.country} ranges={countryMatch} /></p>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+

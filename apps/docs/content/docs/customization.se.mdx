@@ -1,0 +1,128 @@
+---
+title: Personalització
+description: Personalització del comportament de la biblioteca.
+---
+
+## Opcions de Personalització
+
+Per personalitzar el comportament de la cerca, proporcioneu un objecte d'opcions amb els paràmetres següents:
+
+```ts title="index.ts"
+const fuzzySearch = fuzzy(list, {
+  key: "name", // Propietat on buscar als elements
+  getKey: (item) => [item.name, item.author.fullname], // Cercar en múltiples propietats
+  debug: true, // Activar depuració
+  limit: 10, // Nombre màxim de resultats
+  maxScore: 2.5, // Llindar de puntuació màxima per als resultats
+  mapResult: (item) => item, // Transformar l'element de resultat
+});
+```
+
+### `key` i `getKey`
+
+Si el conjunt de dades consisteix en objectes, utilitzeu `key` o `getKey` per especificar en quines propietats cercar.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Result<T>[];
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: Result<T> | null;
+  hasResults: boolean;
+};
+
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+
+const list = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+  { name: "audi", year: 2022 },
+  { name: "bmw", year: 2023 },
+];
+
+const fuzzySearch = fuzzy(list, {
+  key: "name"
+});
+
+const fuzzedList = fuzzySearch("volv");
+console.log(fuzzedList);
+```
+
+De manera similar, `getKey` permet cercar en múltiples propietats o propietats niades.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const list = [
+  { name: "volvo", owner: { fullname: "John Doe" } },
+  { name: "seat", owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", owner: { fullname: "John Smith" } },
+];
+
+const fuzzySearch = fuzzy(list, {
+  getKey: (item) => [item.owner.fullname, item.name],
+});
+```
+
+### Opció `limit`
+
+Limita el nombre de resultats de cerca retornats. Útil per optimitzar el renderitzat de la UI.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  limit: 5,
+});
+```
+
+El conjunt de resultats contindrà un màxim de **5** elements.
+
+### Opció `maxScore`
+
+Filtra els resultats per puntuació, que representa la distància d'una coincidència exacta.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  maxScore: 2, // Excloure resultats amb una puntuació superior a 2
+});
+```
+
+#### Comportament d'Ordenació
+Quan s'utilitzen tant `limit` com `maxScore`, els resultats es filtren primer per puntuació i després es trunquen fins al `limit`.
+
+### Opció `debug`
+
+Activa el registre de detalls d'execució de la cerca a la **consola**.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes"], {
+  debug: true,
+});
+```
+
+### Opció `mapResult`
+
+Transforma els elements de resultat abans de retornar-los.
+
+```ts twoslash title="index.ts"
+// @noErrors
+const fuzzySearch = fuzzy(["volvo", "seat", "mercedes", "audi", "bmw"], {
+  mapResult: (item) => item.toUpperCase(),
+});
+
+const result = fuzzySearch("volvo");
+console.log(result.results[0].item); // "VOLVO"
+```
+
+#### Generics de TypeScript
+La biblioteca utilitza dos generics: un per al tipus d'entrada (elements de la llista) i un altre per al tipus de sortida (elements de resultat). Si s'utilitza `mapResult`, el tipus de sortida s'adapta en conseqüència.
+
+```ts twoslash title="index.ts"
+// @noErrors
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+```

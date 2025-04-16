@@ -1,0 +1,221 @@
+---
+title: Fuzzy en React
+description: Simplifica tu código de React con estas útiles utilidades.
+---
+
+## Resumen
+
+Puedes usar esta librería en React **igual que en un proyecto JavaScript normal**, pero proporcionamos ayudas adicionales para facilitar la integración.
+
+Las diferencias clave son:
+- Uso interno de `useMemo` y `useCallback` para la memorización
+- Una `API` más intuitiva diseñada específicamente para React
+
+Los conceptos principales son `useFuzzy` y `Highlight`.
+
+## Ejemplo básico
+
+Con solo **unas pocas líneas de código**, puedes implementar un fuzzy finder que devuelve resultados coincidentes y **resalta los caracteres coincidentes**:
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react' // Nota: ahora se importa desde /react
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+
+<Callout title="¿Por qué se importa desde `/react`?">
+Es una convención para separar la librería core de la de React. De esta forma, puedes usar la librería principal en otros frameworks o incluso con JavaScript puro. Así el bundle importado es más pequeño y el código más organizado.
+</Callout>
+
+## API
+
+### `useFuzzy`
+
+Este es el hook principal, que proporciona una forma optimizada para buscar elementos.
+
+Acepta las mismas props que la [función `fuzzy`](/get-started), además de algunas opciones adicionales:
+
+1. list - La lista de elementos a buscar. <small>Obligatorio</small>.
+2. query - La búsqueda. <small>Obligatorio</small>.
+
+<Callout>
+Ahora solo necesitas un paso, no hace falta crear la función `fuzzy` y luego llamarla con la query. Puedes usar directamente `useFuzzy` y lo hará por ti internamente.
+</Callout>
+
+### Todas las opciones de `useFuzzy`
+
+```tsx title="App.tsx"
+const filteredList = useFuzzy({
+  list, // obligatorio, la lista de elementos a buscar
+  query, // obligatorio, la query (si está vacía, devuelve todos los elementos)
+  key: "name", // opcional, clave si los items son objetos
+  getKey: (item) => [item.name, item.description], // opcional, igual que key pero puede ser una función o múltiples claves
+  mapResult: (item) => ( item ),  // función de mapeo personalizada, recibe `Result<T>`
+  debug: true, // opcional, si es true, muestra resultados en consola
+  limit: 10, // opcional, número máximo de resultados
+  maxScore: 0.5, // opcional, puntuación máxima permitida
+})
+```
+
+### Highlight
+
+Este es un componente de ayuda que resalta los caracteres coincidentes en el texto.
+
+Podrías recrearlo tú mismo sin problema, pero lo ofrecemos por comodidad.
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+					<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+
+#### Referencia 
+<AutoTypeTable path="./src/types/lib.ts" name="HighlightProps" />
+
+
+## Ejemplos
+
+### Lista de cadenas estáticas
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+
+const App = () => {
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const query = "volv";
+	const { results } = useFuzzy({ list, query });
+	return (
+		<ul>
+			{results.map(({ item, matches }) => (
+				<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+```
+
+### Buscando strings desde un input
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+	const { results } = useFuzzy({ list, query });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches }) => (
+					<li key={item}>
+						<Highlight text={item} ranges={matches[0]} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+
+### Búsqueda de objetos por una clave
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = [
+		{ name: "volvo", country: "sweden" },
+		{ name: "seat", country: "spain" },
+		{ name: "mercedes", country: "germany" },
+		{ name: "ford", country: "usa" },
+		{ name: "toyota", country: "japan" }
+	];
+
+	// Only searching by name 
+	const { results } = useFuzzy({ list, query, key: "name" });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches }) => (
+					<li key={item.name}>
+						<Highlight text={item.name} ranges={matches[0]} />
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+
+### Búsqueda de objetos por múltiples claves
+
+```tsx title="App.tsx"
+import { useFuzzy, Highlight } from '@polgubau/fuzzy/react'
+import { useState } from 'react';
+
+const App = () => {
+	const [query, setQuery] = useState("");
+	const list = [
+		{ name: "volvo", country: "sweden" },
+		{ name: "seat", country: "spain" },
+		{ name: "mercedes", country: "germany" },
+		{ name: "ford", country: "usa" },
+		{ name: "toyota", country: "japan" }
+	];
+
+	// Searching by name and country
+	const { results } = useFuzzy({ list, query, getKey: (item) => [item.name, item.country] });
+
+	return (
+		<div>
+			<input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+			<ul>
+				{results.map(({ item, matches: [nameMatch, countryMatch] }) => (
+					<li key={item.name}>
+						<p>Nombre: <Highlight text={item.name} ranges={nameMatch} /></p>
+						<p>País: <Highlight text={item.country} ranges={countryMatch} /></p>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+```
+

@@ -1,0 +1,54 @@
+---
+title: Getting started
+description: Introduction to @polgubau/fuzzy
+---
+
+## Installation
+
+Install the library using your package manager of choice:
+```package-install
+npm i @polgubau/fuzzy
+```
+ 
+<Accordions type="single">
+  <Accordion title="Using CDN?" value="cdn" id="cdn">
+  To use the library via CDN, include the following script in your HTML:
+  ``` html title="index.html"
+<script src="https://cdn.jsdelivr.net/npm/@polgubau/fuzzy"></script>
+```
+   </Accordion>
+</Accordions>
+
+## Basic Usage
+
+Import the library and use it with a simple list:
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+    results: Array<Result<T>>;
+    length: number;
+    time: number;
+    normalizedQuery: string;
+    hasExactMatch: boolean;
+    bestMatch: Result<T> | null;
+    hasResults: boolean;
+}
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+import fuzzy from '@polgubau/fuzzy';
+
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+const queryText = "volv"; // The search term
+const fuzzySearch = fuzzy(list);
+
+// Run this whenever the search term changes
+const fuzzedList = fuzzySearch(queryText);
+console.log(fuzzedList); 
+```
+<Callout title="Are you using a framework?"> We have special hooks and components for you if you use React or Vue. Check the Frameworks tabs for more information.</Callout>
+ 
+## Response Structure
+This code returns a list of results along with metadata about the search.
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+

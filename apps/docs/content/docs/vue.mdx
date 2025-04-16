@@ -1,0 +1,252 @@
+---
+title: Fuzzy in Vue
+description: Simplify your Vue code with these helpful fuzzy search utilities.
+---
+
+## Summary 
+
+You can use this library in Vue **just like in a regular JavaScript project**, but we provide additional helpers to make integration easier.
+
+The key differences are:
+- Internal use of `ref` and `computed` for reactivity
+- Usage of `watch` for query changes
+
+ 
+## Basic Example
+
+With just **a few lines of code**, you can implement fuzzy search that returns matched results:
+
+```vue title="App.vue"
+<template>
+  <div>
+    <input v-model="query" placeholder="Search..." />
+    <ul>
+      <li v-for="(result, index) in fuzzySearch.results" :key="index">
+        {{ result }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { ref } from "vue";
+import { useFuzzy } from "@polgubau/fuzzy/vue";
+
+export default {
+  setup() {
+    // Lista de strings para la búsqueda
+    const items = ref<string[]>(["Apple", "Banana", "Cherry", "Grape", "Pineapple", "Orange", "Strawberry", "Watermelon"]);
+    const query = ref("");
+
+    // Using the composable
+    const fuzzySearch = useFuzzy({ list: items, query });
+
+    return {
+      query,
+      fuzzySearch,
+    };
+  },
+};
+</script>
+```
+<Callout title="Why we import from `/vue`?">  Its a convention to separate the core library from the Vue library. This way, you can use the core library in other frameworks or even in core JavaScript. With this approach the imported bundle is smaller and the code is more organized.</Callout>
+
+## API
+### `useFuzzy`
+
+This is the main hook for the vue adapter, providing a performance-optimized way to search through items.
+
+It accepts the same props as the core fuzzy, plus some additional options:
+
+1. list - The ref list of items to search through. <small>Required</small>.
+2. query - The ref query to search for. <small>Required</small>.
+
+The structure then will always be like this:
+
+```ts title="lib.ts"
+const fuzzy = useFuzzy({ list, query, options });
+```
+
+<Callout> Now you are using one step only, you don't need to create the `fuzzy` function and then call it with the query. You can just use `useFuzzy` and it will do it for you internally.</Callout>
+
+### All `useFuzzy` Options
+
+```ts title="lib.ts"
+const filteredList = useFuzzy({
+  list, // required, the list of items to search through
+  query, // required, the query to search for (if empty, will return all items)
+	options: {
+		key: "name", // optional, the key if items are objects
+  	getKey: (item) => [item.name, item.description], // optional, the key if items are objects (same as key but can be a function or multiple keys)
+  	mapResult: (item) => ( item ),  // arbitrary mapping function, takes `Result<T>` as input
+  	debug: true, // optional, if true will log the results to the console
+  	limit: 10, // optional, the maximum number of results to return  
+  	maxScore: 0.5, // optional, the maximum score to return 
+	}
+})
+```
+ 
+## Examples
+
+### Static strings list
+
+```vue title="App.vue"
+<template>
+  <div>
+    <input v-model="query" placeholder="Search..." />
+    <ul>
+      <li v-for="(result, index) in fuzzySearch.results" :key="index">
+        {{ result }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { ref } from "vue";
+import { useFuzzy } from "@polgubau/fuzzy/vue";
+
+export default {
+  setup() {
+    const list = ref<string[]>(["Apple", "Banana", "Cherry", "Grape", "Pineapple", "Orange", "Strawberry", "Watermelon"]);
+    const query = ref("");
+
+    // Using the composable
+    const fuzzySearch = useFuzzy<string>({ list, query });
+
+    return {
+      query,
+      fuzzySearch,
+    };
+  },
+};
+</script>
+```
+
+### Object search by one key
+
+```vue title="App.vue"
+<template>
+  <div>
+    <input v-model="query" placeholder="Search for a fruit..." />
+    <div v-for="category in categories" :key="category.id">
+      <h3>{{ category.name }}</h3>
+      <ul>
+        <li v-for="fruit in category.fruits" :key="fruit.id">{{ fruit.name }}</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useFuzzy } from '@polgubau/fuzzy/vue';
+import type { Category, Fruit } from './types';
+
+export default defineComponent({
+  name: 'CategorySearch',
+  setup() {
+    const categories = ref<Category[]>([
+      { id: 1, name: 'Citrus'},
+      { id: 2, name: 'Berries' },
+    ]);
+
+    const query = ref('');
+    
+    const fuzzyResponse = useFuzzy({list: categories, options:{ query, key: "name"}});
+			// you can also do: "getKey: (item) => [item.name]", but for one key this way is simpler
+ 	
+    return { categories, query, fuzzyResponse };
+  },
+});
+</script>
+```
+
+### Object search by multiple keys
+
+```vue title="App.vue"
+<template>
+  <div>
+    <input v-model="query" placeholder="Search for a fruit..." />
+    <div v-for="category in categories" :key="category.id">
+      <h3>{{ category.name }}</h3>
+      <ul>
+        <li v-for="fruit in category.fruits" :key="fruit.id">{{ fruit.name }}</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useFuzzy } from  '@polgubau/fuzzy/vue';
+import type { Category, Fruit } from './types';
+
+export default defineComponent({
+  name: 'CategorySearch',
+  setup() {
+    const categories = ref<Category[]>([
+      { id: 1, name: 'Citrus', fruits: [{ id: 1, name: 'Orange' }, { id: 2, name: 'Lemon' }] },
+      { id: 2, name: 'Berries', fruits: [{ id: 3, name: 'Strawberry' }, { id: 4, name: 'Blueberry' }] },
+    ]);
+
+    const query = ref('');
+    
+    const fuzzyResponse = useFuzzy<Fruit, Fruit>({list: categories, options:{ query, getText: (item) => [item.name, item.map(fruit => fruit.name)]}
+
+    return { categories, query, fuzzyResponse };
+  },
+});
+</script>
+```
+
+### Search exact matches
+
+```vue title="App.vue"
+<template>
+  <div>
+    <input v-model="query" placeholder="Search for a product..." />
+    <div v-if="fuzzyResponse.hasExactMatch">
+      <p>Exact match found!</p>
+    </div>
+    <ul>
+      <li v-for="product in fuzzyResponse.results" :key="product.id">{{ product.name }}</li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useFuzzy } from '@polgubau/fuzzy/vue';
+import type { Product } from './types';
+
+export default defineComponent({
+  name: 'ProductSearch',
+  setup() {
+    const products = ref<Product[]>([
+      { id: 1, name: 'Smartphone' },
+      { id: 2, name: 'Laptop' },
+      { id: 3, name: 'Tablet' },
+      { id: 4, name: 'Smartwatch' },
+     ]);
+
+    const query = ref('');
+    
+    const fuzzyResponse = useFuzzy({ list: products, query, options: { maxScore: 0.5 } });
+
+    return { query, fuzzyResponse };
+  },
+});
+</script>
+```
+
+## References
+
+### Options 
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyOptions" />
+
+### Reponse 
+<AutoTypeTable path="./src/types/lib.ts" name="FuzzyResponse" />
+
+### Result 
+<AutoTypeTable path="./src/types/lib.ts" name="Result" />

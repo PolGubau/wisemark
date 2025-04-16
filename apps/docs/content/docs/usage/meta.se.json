@@ -1,0 +1,9 @@
+{
+  "title": "Usos",
+  "description": "Aprèn a usar la biblioteca en els teus projectes, incloent guies pas a pas, manipulació de cadenes i maneig d'objectes.",
+  "pages": [
+    "stepByStep",
+    "strings",
+    "objects"
+  ]
+}

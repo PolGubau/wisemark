@@ -1,0 +1,136 @@
+---
+title: Cercador de notes
+description: crea una aplicació de notes senzilla amb fuzzy finder amb React.
+---
+
+## Resum
+En aquest exemple, construirem una aplicació de notes senzilla utilitzant la biblioteca. L'aplicació us permetrà cercar notes per títol o contingut.
+
+<Steps>
+ <Step>
+ ### Crea un projecte React
+ ```bash title="bash"
+ pnpm create vite@latest notes-finder --template react-ts
+ cd notes-finder
+ pnpm install
+ ```
+ </Step>
+ <Step>
+
+### Instal·la la biblioteca 
+ ```bash title="bash"
+ pnpm add @polgubau/fuzzy
+ ```
+ </Step>
+ <Step>
+ ### Creeu un fitxer de dades
+ Creeu un fitxer anomenat `notes.ts` a la carpeta `src` i afegiu el codi següent:
+
+```ts title="src/notes.ts"
+export const notes = [
+  {
+    id: 1,
+    title: "Practica Nuxt.js",
+    content: "Aprèn a utilitzar Nuxt.js per a la representació del servidor.",
+  },
+  {
+    id: 2,
+    title: "Crea una aplicació per a tot",
+    content: "Creeu una aplicació senzilla de tot fent servir React i TypeScript.",
+  },
+  {
+    id: 3,
+    title: "Aprèn TypeScript",
+    content: "Comprendre els fonaments bàsics de TypeScript i les seves característiques.",
+  },
+  {
+    id: 4,
+    title: "Explora React Router",
+    content: "Aprèn a utilitzar React Router per a la navegació a les aplicacions React.",
+  },
+  {
+    id: 5,
+    title: "Estudi Redux",
+    content: "Comprendre com gestionar l'estat amb Redux.",
+  },
+];
+ ```
+ </Step>
+ <Step>
+
+ ### Creeu un component de cerca
+
+
+Creeu un fitxer anomenat `Search.tsx` a la carpeta `src` i afegiu el codi següent:
+
+```tsx title="src/Search.tsx"
+  import { useState } from "react";
+  import { Highlight, useFuzzy } from "@polgubau/fuzzy/react";
+  import { notes } from "./notes";
+
+  const Search: React.FC = () => {
+	const [query, setQuery] = useState("");
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setQuery(e.target.value);
+	};
+
+	const filteredList = useFuzzy({
+		list: notes,
+		// Si `query` és una cadena buida, es retorna la llista sencera
+		query,
+		// `getKey` especifica com s'han d'extreure les claus de cerca dels elements de la llista
+		getKey: (item) => [item.title, item.content],
+	});
+
+	return (
+		<div>
+			<input
+				className="border-2 border-fd-foreground dark:bg-fd-accent rounded-lg w-full p-2 mb-4"
+				type="search"
+				value={query}	
+				onChange={handleChange}
+				placeholder="Buscar notes..."
+			/>
+			<ul>
+				{filteredList.map(({ item, _score, matches: [nameRanges, contentRanges] }) => (
+					<li key={item.id}>
+						<h3>
+							<Highlight text={item.title} ranges={nameRanges} />
+						</h3>
+						<p>
+							<Highlight text={item.content} ranges={contentRanges} />
+						</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+  ```
+ </Step>
+ <Step>
+ ### Creeu el component principal de l'aplicació
+
+ Creeu un fitxer anomenat "App.tsx" a la carpeta "src" i afegiu el codi següent:
+ 
+ ```tsx title="src/App.tsx"
+  import React from "react";
+  import Search from "./Search";
+  import "./App.css";
+  const App: React.FC = () => {
+    return (
+      <div className="App">
+        <h1>Cercador de Notes</h1>
+        <Search />
+      </div>
+    );
+  };
+  export default App;
+  ```
+ </Step>
+</Steps>
+
+
+## Resultat
+<ExampleNotesSearchDisplay/>

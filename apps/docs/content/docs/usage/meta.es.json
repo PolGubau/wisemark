@@ -1,0 +1,9 @@
+{
+  "title": "Uso",
+  "description": "Aprende a usar la biblioteca en tus proyectos, incluyendo guías paso a paso, manipulación de cadenas y manejo de objetos.",
+  "pages": [
+    "stepByStep",
+    "strings",
+    "objects"
+  ]
+}

@@ -1,0 +1,1 @@
+@polgubau/fuzzy - optimized fuzzy finder library designed with TypeScript from the roots.

@@ -1,0 +1,249 @@
+---
+title: Personalización
+description: Personalizar el comportamiento de la librería.
+---
+
+## Opciones de personalización
+
+Para personalizar la búsqueda, la función acepta un objeto con las siguientes opciones:
+
+```ts title="index.ts"
+const fuzzySearch = fuzzy(list, {
+  key: "name", // Esta es la clave por la que se buscará en el ítem.
+  getKey: (item) => [item.name, item.author.fullname],  // búsqueda por múltiples propiedades
+  debug: true, // Añade cualquier opción adicional aquí
+  limit: 10, // El número máximo de resultados a devolver
+  maxScore: 2.5, // La puntuación máxima para los resultados
+  mapResult: (item) => item, // Una función para mapear el ítem de resultado a un nuevo objeto
+});
+```
+
+### `key` y `getKey`
+
+En caso de que los datos enviados sean objetos, puedes usar las opciones key y getKey para especificar qué propiedad buscar.
+
+```ts twoslash title="index.ts"
+// @noErrors
+export type Fuzzy<T> = (query: string) => {
+  results: Result<T>[];
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: Result<T> | null;
+  hasResults: boolean;
+};
+function fuzzy<T>(collection: T[], options?: FuzzyOptions<T>): Fuzzy<T>;
+// ---cut---
+const list = [
+  { name: "volvo", year: 2020 },
+  { name: "seat", year: 2019 },
+  { name: "mercedes", year: 2021 },
+  { name: "audi", year: 2022 },
+  { name: "bmw", year: 2023 },
+];
+
+const fuzzySearch = fuzzy(list, {
+  key: "name" 
+//^^^
+});
+
+// Ejecuta esto siempre que cambie el término de búsqueda
+const fuzzedList = fuzzySearch("volv");
+console.log(fuzzedList); 
+
+```
+
+De la misma manera, puedes usar la opción `getKey` para buscar por múltiples propiedades o propiedades anidadas.
+
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Array<{ item: T; score: number; matches: Matches }>;
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: { item: T; score: number; matches: Matches } | null;
+  hasResults: boolean;
+}
+export type FuzzyOptions<T, U = T> = {
+  key?: keyof T;
+  getKey?: (item: T) => Array<string | null>;
+  debug?: boolean;
+  limit?: number;
+  maxScore?: number;
+  mapResult?: (result: T) => U;
+};
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+// ---cut---
+const list = [
+  { name: "volvo", year: 2020, owner: { fullname: "John Doe" } },
+  { name: "seat", year: 2019, owner: { fullname: "Jane Doe" } },
+  { name: "mercedes", year: 2021, owner: { fullname: "John Smith" } },
+]
+
+const fuzzySearch = fuzzy(list, {
+  getKey: (item) => [item.owner.fullname, item.name], // búsqueda por múltiples propiedades
+//^^^^^^
+})
+
+
+```
+
+### La opción `limit`
+
+La opción `limit` permite limitar el número de resultados devueltos por la búsqueda.
+
+Esto puede ser útil si tienes una lista grande y solo quieres mostrar los primeros resultados, o si tienes una interfaz fija como una cuadrícula.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Array<{ item: T; score: number; matches: Matches }>;
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: { item: T; score: number; matches: Matches } | null;
+  hasResults: boolean;
+}
+export type FuzzyOptions<T, U = T> = {
+  key?: keyof T;
+  getKey?: (item: T) => Array<string | null>;
+  debug?: boolean;
+  limit?: number;
+  maxScore?: number;
+  mapResult?: (result: T) => U;
+};
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+
+const fuzzySearch = fuzzy(list, {
+   limit: 5, // Limita el número de resultados devueltos
+// ^^^^^
+})
+```
+
+La longitud de la respuesta será como máximo de **5** elementos.
+
+
+### La opción `maxScore`
+
+La opción maxScore permite establecer la puntuación máxima para los resultados.
+
+Recuerda que la puntuación es un número que comienza desde 0 (coincidencia exacta) y aumenta a medida que la coincidencia empeora. Piénsalo como una distancia desde la mejor coincidencia.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Array<{ item: T; score: number; matches: Matches }>;
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: { item: T; score: number; matches: Matches } | null;
+  hasResults: boolean;
+}
+export type FuzzyOptions<T, U = T> = {
+  key?: keyof T;
+  getKey?: (item: T) => Array<string | null>;
+  debug?: boolean;
+  limit?: number;
+  maxScore?: number;
+  mapResult?: (result: T) => U;
+};
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+
+const fuzzySearch = fuzzy(list, {
+   maxScore: 2, // Los elementos con una puntuación mayor que 2 serán ignorados (solo se devolverán elementos similares)
+// ^^^^^^^^
+})
+
+```
+
+#### Filtrado por puntuación
+Cuando se usan tanto `limit` como `maxScore`, el algoritmo primero filtrará los resultados por puntuación y luego limitará el número de resultados devueltos.
+
+### La opción `debug`
+
+La opción `debug` permite registrar detalles sobre la búsqueda en la consola del navegador como una tabla para cada ítem o el tiempo que tardó en ejecutarse la búsqueda.
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Array<{ item: T; score: number; matches: Matches }>;
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: { item: T; score: number; matches: Matches } | null;
+  hasResults: boolean;
+}
+export type FuzzyOptions<T, U = T> = {
+  key?: keyof T;
+  getKey?: (item: T) => Array<string | null>;
+  debug?: boolean;
+  limit?: number;
+  maxScore?: number;
+  mapResult?: (result: T) => U;
+};
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes"];
+
+const fuzzySearch = fuzzy(list, {
+   debug: true, // Activa el modo de depuración, lo que registrará detalles sobre la búsqueda en la consola
+// ^^^^^
+})
+
+```
+
+### La opción `mapResult`
+
+Es una función llamada internamente antes de la respuesta que mapea el ítem de resultado a un nuevo ítem. Se utiliza principalmente para transformar el ítem de resultado a un tipo diferente.
+
+
+```ts twoslash title="index.ts"
+// @noErrors
+type Fuzzy<T> = (query: string) => {
+  results: Array<{ item: T; score: number; matches: Matches }>;
+  length: number;
+  time: number;
+  normalizedQuery: string;
+  hasExactMatch: boolean;
+  bestMatch: { item: T; score: number; matches: Matches } | null;
+  hasResults: boolean;
+}
+export type FuzzyOptions<T, U = T> = {
+  key?: keyof T;
+  getKey?: (item: T) => Array<string | null>;
+  debug?: boolean;
+  limit?: number;
+  maxScore?: number;
+  mapResult?: (result: T) => U;
+};
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+// ---cut---
+const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+
+const fuzzySearch = fuzzy(list, {
+   mapResult: (item) => item.toUpperCase(), // Mapea el ítem de resultado a un nuevo ítem
+// ^^^^^^^^^^^^^
+});
+  const result = fuzzySearch("volvo");
+  console.log(result.results[0].item); // VOLVO
+```
+
+#### Genericos de TypeScript
+La librería utiliza dos genéricos: uno para el tipo de entrada (ítems de la lista) y otro para el tipo de salida (ítems de resultado). Si se utiliza `mapResult`, el tipo de salida se adapta en consecuencia.
+
+```ts twoslash title="index.ts"
+// @noErrors
+function fuzzy<T, U = T>(collection: T[], options?: FuzzyOptions<T, U>): Fuzzy<U>;
+```
+

@@ -1,0 +1,9 @@
+{
+  "title": "Verwendung",
+  "description": "Erfahren Sie, wie Sie die Bibliothek in Ihren Projekten verwenden können, einschließlich Schritt-für-Schritt-Anleitungen, Zeichenfolgenmanipulation und Objektbehandlung.",
+  "pages": [
+    "stepByStep",
+    "strings",
+    "objects"
+  ]
+}

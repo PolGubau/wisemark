@@ -1,0 +1,54 @@
+---
+title: Step-by-Step Usage
+description: Understanding how to use the library and its API.
+---
+
+## Step by Step
+<Steps>
+  <Step>
+  ### Import the library
+  
+  ```ts
+  import fuzzy from '@polgubau/fuzzy';
+  ``` 
+  </Step>
+  
+  <Step>
+  ### Create a list of items to search through
+  ```ts twoslash
+  const list = ["volvo", "seat", "mercedes", "audi", "bmw"];
+  ```
+  In this example we are using a list of strings but **you can also use other data types** .
+  </Step>
+  <Step>
+  ### Create a fuzzy search function
+  ```ts
+  const fuzzySearch = fuzzy(list);
+  ```
+  This function will be used to search through the list.
+  </Step>
+  <Step>
+  ### Call the fuzzy search function
+  ```ts twoslash
+  // @noErrors
+  const queryText: string = "vol"; // The search term
+  const results = [{ item: "volvo", score: 0.9, matches: [0,3] }]
+
+  // ---cut---
+  const results = fuzzySearch(queryText);
+  ```
+  This will return the search results based on the query text.
+
+  Call this function whenever the search term changes.
+  </Step>
+  <Step>
+  ### Use the results
+  ```ts twoslash 
+  const results = [{ item: "volvo", score: 0.9, matches: [0,3] }]
+  // ---cut---
+  console.log(results);
+  /* Example output: [{ item: "volvo", score: 0.9, matches: [0,3] }] */
+  ```
+  The results will include the matched item, its score, and the positions of the matches in the original string.
+  </Step>
+</Steps>

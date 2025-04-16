@@ -1,0 +1,108 @@
+---
+title: Buscador de notas de React
+description: Crea una aplicación de notas sencilla con fuzzy finder usando React.
+---
+
+## Resumen
+En este ejemplo, crearemos una aplicación de notas sencilla usando la biblioteca. La aplicación te permitirá buscar notas por título o contenido.
+
+<Steps>
+<Step>
+### Crear un proyecto React
+```bash title="bash"
+pnpm create vite@latest notes-finder --template react-ts
+cd notes-finder
+pnpm install
+```
+</Step>
+<Step>
+### Instalar la biblioteca
+```bash title="bash"
+pnpm add @polgubau/fuzzy
+```
+</Step>
+<Step>
+### Crear un archivo de datos de notas
+Crear un archivo llamado `notes.ts` en la carpeta `src` y agregar el siguiente código:
+```ts title="src/notes.ts"
+export const notes = [
+  {id: 1, title: "Practica Nuxt.js", content: "Aprende a usar Nuxt.js para la renderización del lado del servidor."},
+  {id: 2, title: "Crear una tarea pendiente", content: "Crea una aplicación sencilla de tareas pendientes con React y TypeScript."},
+  {id: 3, title: "Aprende TypeScript", content: "Comprende los fundamentos de TypeScript y sus características."},
+  {id: 4, title: "Explora React Router", content: "Aprende a usar React Router para la navegación en aplicaciones React."},
+  {id: 5, title: "Estudia Redux", content: "Comprende cómo gestionar el estado con Redux."},
+];
+```
+</Step>
+<Step>
+### Crear un componente de búsqueda
+Crea un archivo llamado `Search.tsx` en la carpeta `src` y agrega el siguiente código:
+```tsx title="src/Search.tsx"
+  import { useState } from "react";
+  import { Highlight, useFuzzy } from "@polgubau/fuzzy/react";
+  import { notes } from "./notes";
+
+
+  const Search: React.FC = () => {
+	const [query, setQuery] = useState("");
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setQuery(e.target.value);
+	};
+
+	const filteredList = useFuzzy({
+		list: notes,
+		// Si `query` es una cadena vacía, se devuelve la lista completa
+		query,
+		// `getKey` especifica cómo se deben extraer las claves de búsqueda de los elementos de la lista
+		getKey: (item) => [item.title, item.content],
+	});
+
+	return (
+		<div>
+			<input
+				className="border-2 border-fd-foreground dark:bg-fd-accent rounded-lg w-full p-2 mb-4"
+				type="search"
+				value={query}	
+				onChange={handleChange}
+				placeholder="Buscar notas..."
+			/>
+			<ul>
+				{filteredList.map(({ item, _score, matches: [nameRanges, contentRanges] }) => (
+					<li key={item.id}>
+						<h3>
+							<Highlight text={item.title} ranges={nameRanges} />
+						</h3>
+						<p>
+							<Highlight text={item.content} ranges={contentRanges} />
+						</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+};
+  ```
+</Step>
+<Step>
+### Crear el componente principal de la aplicación
+Crear un archivo llamado `App.tsx` en la carpeta `src` y agregar el siguiente código:
+```tsx title="src/App.tsx"
+  import React from "react";
+  import Search from "./Search";
+  import "./App.css";
+  const App: React.FC = () => {
+    return (
+      <div className="App">
+        <h1>Buscador de Notas</h1>
+        <Search />
+      </div>
+    );
+  };
+  export default App;
+  ```
+</Step>
+</Steps>
+
+## Resultado
+<ExampleNotesSearchDisplay/>

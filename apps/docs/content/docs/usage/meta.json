@@ -1,0 +1,9 @@
+{
+  "title": "Usage",
+  "description": "Learn how to use the library in your projects, including step-by-step guides, string manipulation, and object handling.",
+  "pages": [
+    "stepByStep",
+    "strings",
+    "objects"
+  ]
+}

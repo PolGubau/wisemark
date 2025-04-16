@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "@polgubau/animated";
+@import "fumadocs-ui/css/dusk.css";
+@import "fumadocs-ui/css/preset.css";
+@import "fumadocs-twoslash/twoslash.css";
+
+@source '../../node_modules/fumadocs-ui/dist/**/*.js';
+
+:root {
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+	--color-primary: oklch(0.768 0.233 130.85);
+}
