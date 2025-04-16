@@ -1,5 +1,5 @@
 import type { CLIScanOptions } from "../../types";
-import { filterComments } from "../../utils/filter";
+import { filterComments } from "./filter";
 import { printResults } from "../../utils/printer";
 import { scanProject } from "../../utils/scan-all";
 import { validateParams } from "./validate";
@@ -7,7 +7,9 @@ import { validateParams } from "./validate";
 export async function scanAll(options: CLIScanOptions) {
 	validateParams(options);
 	const initTime = Date.now();
-	const comments = await scanProject(options.cwd);
+	// sumar options.cwd y options.path
+	const fullPath = `${options.cwd}/${options.path}`;
+	const comments = await scanProject(fullPath);
 	const filtered = filterComments(comments, options);
 
 	const time = Date.now() - initTime;

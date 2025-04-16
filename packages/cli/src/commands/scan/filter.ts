@@ -1,5 +1,5 @@
 import type { Comment } from "@wisemark/core";
-import type { CLIScanOptions } from "../types";
+import type { CLIScanOptions } from "../../types";
 
 export function filterComments(
 	comments: Comment[],

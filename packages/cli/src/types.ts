@@ -5,5 +5,6 @@ export type CLIScanOptions = {
 	severity?: Severity;
 	json?: boolean;
 	cwd: string;
+	path?: string;
 	tags?: string;
 };
