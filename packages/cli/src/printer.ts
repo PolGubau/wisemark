@@ -1,4 +1,4 @@
-import type { wisemarkComment, Type } from "@wisemark/core";
+import type { Comment, Type } from "@wisemark/core";
 import pc from "picocolors";
 
 const typeColor: Record<Type, (x: string) => string> = {
@@ -8,7 +8,7 @@ const typeColor: Record<Type, (x: string) => string> = {
 	question: pc.cyan,
 };
 
-export function printResults(comments: wisemarkComment[]) {
+export function printResults(comments: Comment[]) {
 	if (comments.length === 0) {
 		console.log(pc.green("✅ No wisemark comments found"));
 		return;

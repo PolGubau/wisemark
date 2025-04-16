@@ -1,7 +1,7 @@
 import { cac } from "cac";
-import { scanProject } from "./scan";
+import { scanProject } from "./scan.js";
 import { printResults } from "./printer";
-import type { wisemarkComment } from "@wisemark/core";
+import type { Comment } from "@wisemark/core";
 
 const cli = cac("wisemark");
 
@@ -36,10 +36,10 @@ cli.command("").action(async (options: CLIOptions) => {
 cli.parse();
 
 function applyFilters(
-	comments: wisemarkComment[],
+	comments: Comment[],
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	options: any,
-): wisemarkComment[] {
+): Comment[] {
 	return comments.filter((c) => {
 		if (options.type && c.type !== options.type) return false;
 		if (options.severity && c.severity !== options.severity) return false;

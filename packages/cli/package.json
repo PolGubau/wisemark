@@ -8,10 +8,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsup",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "start": "npx ts-node src/index.ts"
   },
   "dependencies": {
     "@wisemark/core": "workspace:*",

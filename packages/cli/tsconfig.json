@@ -1,38 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // Para generar código compatible con Node.js 14 o superior
-    "module": "NodeNext", // Módulos ES para trabajar con import/export
-    "moduleResolution": "nodenext", // Resolución de módulos estilo Node.js
-    "esModuleInterop": true, // Para permitir la importación de módulos CommonJS
-    "skipLibCheck": true, // Salta la comprobación de tipos en archivos de bibliotecas
-    "forceConsistentCasingInFileNames": true, // Asegura que el sistema de archivos respete las mayúsculas/minúsculas
-    "outDir": "./dist", // Directorio de salida para los archivos compilados
-    "rootDir": "./src", // Directorio raíz donde se encuentra el código fuente
-    "strict": true, // Activar todas las verificaciones estrictas de tipos
-    "strictNullChecks": true, // Asegura que los valores `null` o `undefined` sean tratados adecuadamente
-    "resolveJsonModule": true, // Permite importar archivos JSON
-    "declaration": true, // Generar archivos `.d.ts` (tipos para otros paquetes)
-    "declarationMap": true, // Generar mapas de declaración para ayudar con la depuración
-    "sourceMap": true, // Genera mapas de origen para facilitar la depuración
-    "allowImportingTsExtensions": true,
-    "emitDeclarationOnly": true,
-    "lib": [
-      "ES2020",
-      "ESNext"
-    ], // Librerías para trabajar con funciones modernas de JavaScript
-    "noEmit": false // Compilar archivos sin emitir salida
+    "outDir": "dist",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true
   },
   "include": [
-    "src/**/*.ts", // Incluir todos los archivos TypeScript en `src`
-    "types/**/*.d.ts" // Incluir definiciones de tipos personalizadas
+    "src"
   ],
   "exclude": [
-    "node_modules", // Excluir `node_modules` de la compilación
-    "dist" // Excluir la carpeta de salida `dist`
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS" // Necesario para ejecutar TypeScript con `ts-node` en CLI
-    }
-  }
+    "node_modules",
+    "**/*.test.ts",
+  ]
 }
