@@ -24,12 +24,9 @@
   "scripts": {
     "test": "vitest",
     "dev": "pnpm run /^dev:.*/",
-    "dev:lib": "cd packages/fuzzy && pnpm build:watch",
-    "dev:app": "cd apps/docs && pnpm dev",
-    "build:lib": "cd packages/fuzzy && pnpm build",
+    "release": "changeset publish",
     "build": "pnpm -r build",
-    "prepare": "husky install",
-    "lint-staged": "cd packages/fuzzy && pnpm lint-fix"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
