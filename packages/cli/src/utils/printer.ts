@@ -8,9 +8,9 @@ const typeColor: Record<Type, (x: string) => string> = {
 	question: pc.cyan,
 };
 
-export function printResults(comments: Comment[]) {
+export function printResults(comments: Comment[], time: number) {
 	if (comments.length === 0) {
-		console.log(pc.green("✅ No wisemark comments found"));
+		console.log(pc.green(`✅ No wisemark comments found in ${time}ms`));
 		return;
 	}
 
@@ -20,4 +20,7 @@ export function printResults(comments: Comment[]) {
 			`${color(`[${c.type.toUpperCase()}]`)} ${pc.bold(c.message)}\n  ↪ ${pc.gray(c.filePath)}:${pc.yellow(c.line.toString())}${c.id ? ` ${pc.magenta(`#${c.id}`)}` : ""}${c.severity ? ` ${pc.red(`(${c.severity})`)}` : ""}${c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : ""}`,
 		);
 	}
+	console.log(
+		pc.green(`✅ Found ${comments.length} wisemark comments in ${time}ms`),
+	);
 }

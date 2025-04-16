@@ -1,5 +1,8 @@
-export type Type = "todo" | "fixme" | "note" | "question";
-export type Severity = "low" | "medium" | "high";
+export const types = ["todo", "fixme", "note", "question"] as const;
+export type Type = (typeof types)[number];
+
+export const severities = ["low", "medium", "high"] as const;
+export type Severity = (typeof severities)[number];
 
 export type Comment = {
 	id: string;

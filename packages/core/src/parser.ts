@@ -7,7 +7,7 @@ const extractField = (raw: string, key: string): string | undefined => {
 const extractTags = (raw: string): string[] =>
 	extractField(raw, "tags")?.split(",") ?? [];
 
-export function parsewisemarkComments(
+export function parseComments(
 	fileContent: string,
 	filePath = "unknown",
 ): Comment[] {

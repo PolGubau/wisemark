@@ -1,52 +1,21 @@
 import { cac } from "cac";
-import { scanProject } from "./scan.js";
-import { printResults } from "./printer";
-import type { Comment } from "@wisemark/core";
+import { version } from "../package.json";
+import { scanAll } from "./commands/scan/scanAll.action";
+import { addScanFilters } from "./commands/scan/params";
 
 const cli = cac("wisemark");
 
 cli
-	.option("--type <type>", "Filtra por tipo (@todo, @note...)")
-	.option("--severity <severity>", "Filtra por severidad (low, medium, high)")
-	.option("--json", "Devuelve la salida en formato JSON")
-	.option("--tags <tags>", "Filtra por tags separados por coma (bug,refactor)")
-	.option("--cwd <path>", "Path base para escanear", {
-		default: process.cwd(),
-	});
+	.command("scan", "Scan the project for comments")
+	.alias("s")
+	.action(async (o) => scanAll(o));
+addScanFilters(cli.commands[0]);
+
+// cli.command("list").action(async (options: CLIOptions) => {
 
 cli.help();
-type CLIOptions = {
-	type?: string;
-	severity?: "low" | "medium" | "high";
-	json?: boolean;
-	cwd: string;
-};
+cli.version(version, "Wisemark version");
+cli.usage("wisemark [options] [command]");
 
-cli.command("").action(async (options: CLIOptions) => {
-	const comments = await scanProject(options.cwd);
-	const filtered = applyFilters(comments, options);
-
-	if (options.json) {
-		console.log(JSON.stringify(filtered, null, 2));
-	} else {
-		printResults(filtered);
-	}
-});
-
+cli.example("wisemark scan --type todo --severity low");
 cli.parse();
-
-function applyFilters(
-	comments: Comment[],
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	options: any,
-): Comment[] {
-	return comments.filter((c) => {
-		if (options.type && c.type !== options.type) return false;
-		if (options.severity && c.severity !== options.severity) return false;
-		if (options.tags) {
-			const tags = options.tags.split(",");
-			if (!c.tags?.some((t: string) => tags.includes(t))) return false;
-		}
-		return true;
-	});
-}

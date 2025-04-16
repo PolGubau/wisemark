@@ -1,5 +1,6 @@
 {
   "name": "@wisemark/cli",
+  "displayName": "Wisemark CLI",
   "version": "1.0.0",
   "bin": {
     "wisemark": "./dist/bin.js",
@@ -11,7 +12,11 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
-    "dev": "node dist/index.js"
+    "build:watch": "tsup --watch",
+    "dev": "node dist/index.js",
+    "start": "pnpm build && pnpm dev",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@wisemark/core": "workspace:*",

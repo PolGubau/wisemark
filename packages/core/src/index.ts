@@ -1,2 +1,3 @@
-export { Type, Severity, Comment } from "./types";
-export { parsewisemarkComments } from "./parser";
+export type { Type, Severity, Comment } from "./types";
+export { types, severities } from "./types";
+export { parseComments } from "./parser";
