@@ -4,6 +4,9 @@
     "wisemark": "./dist/bin.js",
     "wmk": "./dist/bin.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "build": "tsup",

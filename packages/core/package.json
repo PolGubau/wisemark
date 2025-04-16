@@ -7,6 +7,9 @@
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "browser": "./dist/browser/core.production.mjs",
