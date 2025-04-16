@@ -15,6 +15,7 @@ if (-not $gitPath) {
     exit 1
 }
 
+
 # Añade todos los cambios al staging
 git add .
 
