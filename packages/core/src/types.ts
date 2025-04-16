@@ -4,6 +4,9 @@ export type Type = (typeof types)[number];
 export const severities = ["low", "medium", "high"] as const;
 export type Severity = (typeof severities)[number];
 
+export const statuses = ["open", "closed", "in-progress"] as const;
+export type Status = (typeof statuses)[number];
+
 export type Comment = {
 	id: string;
 	message: string;
@@ -14,7 +17,7 @@ export type Comment = {
 	tags?: string[];
 	author?: string;
 	due?: string;
-	status?: "open" | "closed" | "in-progress";
+	status?: Status;
 	created?: string;
 	related?: string;
 	context?: string;

@@ -4,20 +4,21 @@ import fs from "node:fs";
 import pc from "picocolors";
 
 export function validateParams(options: CLIScanOptions) {
+	let shouldExit = false;
 	// Validating 'type'
 	if (options.type && !types.includes(options.type)) {
 		console.error(
 			`\n${pc.red("🔴 Error:")} ${pc.bold(`Invalid type "${pc.red(options.type)}"`)}\n` +
 				`${pc.dim("→")} Valid types are: ${pc.cyan(types.join(", "))}\n`,
 		);
-
-		process.exit(1);
+		shouldExit = true;
 	}
-
-	// Validar 'severity'
 	if (options.severity && !severities.includes(options.severity)) {
-		console.error("Error: La severidad debe ser uno de: low, medium, high");
-		process.exit(1);
+		console.error(
+			`\n${pc.red("🔴 Error:")} ${pc.bold(`Invalid severity "${pc.red(options.severity)}"`)}\n` +
+				`${pc.dim("→")} Valid severities are: ${pc.cyan(severities.join(", "))}\n`,
+		);
+		shouldExit = true;
 	}
 
 	// Validar 'tags'
@@ -34,6 +35,11 @@ export function validateParams(options: CLIScanOptions) {
 	// Validar 'cwd' (si existe la ruta)
 	if (!fs.existsSync(options.cwd)) {
 		console.error(`Error: El directorio ${options.cwd} no existe.`);
+		process.exit(1);
+	}
+
+	// if shouldExit is true, exit the process
+	if (shouldExit) {
 		process.exit(1);
 	}
 }

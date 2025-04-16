@@ -20,7 +20,8 @@ export function printResults(comments: Comment[], time: number) {
 			`${color(`[${c.type.toUpperCase()}]`)} ${pc.bold(c.message)}\n  ↪ ${pc.gray(c.filePath)}:${pc.yellow(c.line.toString())}${c.id ? ` ${pc.magenta(`#${c.id}`)}` : ""}${c.severity ? ` ${pc.red(`(${c.severity})`)}` : ""}${c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : ""}`,
 		);
 	}
-	console.log(
-		pc.green(`✅ Found ${comments.length} wisemark comments in ${time}ms`),
-	);
+	console.log(`\n
+${pc.green(`✅ Found ${comments.length} wisemark comments in ${time}ms`)}
+	
+`);
 }
