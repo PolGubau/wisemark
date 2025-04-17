@@ -1,30 +1,40 @@
 import type { Comment } from "@wisemark/core";
-import pc from "picocolors";
 
-
-
-export const printCommentsAsTable = (comments: Comment[], color: (c: string) => string) => {
-
+ 
+export const printCommentsAsTable = (comments: Comment[]) => {
+  const anyCommentHasTags = comments.some((c) => c.tags && c.tags.length > 0);
 
   const parsedComments = comments.map((c) => {
-    return {
-      type: color(`[${c.type.toUpperCase()}]`),
-      message: pc.bold(c.message.trim()),
-      filePath: c.filePath ? pc.gray(c.filePath) : pc.gray("File not found"),
-      line: pc.yellow(c.line.toString()),
-      id: c.id ? pc.magenta(`#${c.id}`) : "",
-      severity: c.severity ? pc.red(`(${c.severity})`) : "",
-      tags: c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : "",
-    };
-  })
+    const shortPath = c.filePath.split("/").slice(-2).join("/"); 
+    const displayPath = (`${shortPath}:${c.line}`); 
+    const fullPath = `${c.filePath}:${c.line}`; 
+    const message = c.message.length > 40 ? `${c.message.slice(0, 40)}...` : c.message;
 
-  console.table(parsedComments, [
-    "type",
-    "message",
-    "filePath",
-    "line",
-    "id",
-    "severity",
-    "tags",
-  ])
+
+    // show the tag column if any comment has tags
+    if (anyCommentHasTags) {
+      return {
+        type: c.type,
+        message,
+        location: displayPath, 
+        fullLocation: fullPath, 
+        id: c.id,
+        severity: c.severity ?? "",
+        tags: c.tags?.join(", ") ?? "",
+      };
+    }
+
+    return {
+      type: c.type,
+      message,
+       location: displayPath, 
+      fullLocation: fullPath, 
+      id: c.id,
+      severity: c.severity ?? "",
+    };
+  });
+
+  // Mostrar tabla sin la ruta completa
+  console.table(parsedComments.map(({ fullLocation, ...rest }) => rest));
+ 
 };
