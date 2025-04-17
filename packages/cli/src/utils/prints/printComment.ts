@@ -1,7 +1,11 @@
 import type { Comment } from "@wisemark/core";
 import pc from "picocolors";
 
-export const printComment = (c: Comment, color: (c: string) => string) => {
+
+type Options = {
+	showDate: boolean;
+};
+export const printComment = (c: Comment, color: (c: string) => string, options?: Options) => {
 	// days to due date
 	const dueDate = c.due ? new Date(c.due) : null;
 	const today = new Date();
@@ -9,11 +13,23 @@ export const printComment = (c: Comment, color: (c: string) => string) => {
 	const daysToDueDate = dueDate
 		? Math.ceil((dueDate.getTime() - today.getTime()) / (1000 * 3600 * 24))
 		: null;
-	const dueDateString = dueDate
-		? `Due: ${dueDate.toLocaleDateString()}`
-		: "No due date";
+
+
+	const type = color(`[${c.type.toUpperCase()}]`)
+	const message = pc.bold(c.message.trim());
+	const filePath = c.filePath ? pc.gray(c.filePath) : pc.gray("File not found");
+	const line = pc.yellow(c.line.toString());
+	const id = c.id ? pc.magenta(`#${c.id}`) : '';
+	const severity = c.severity ? pc.red(`(${c.severity})`) : '';
+	const tags = c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : "";
+	const dueDateString = dueDate ? `Due: ${dueDate.toLocaleDateString()}` : "";
+	const daysRemaining = daysToDueDate !== null ? `${daysToDueDate} days left ` : "";
+	const daysLeft = daysToDueDate !== null ? (daysToDueDate < 0 ? pc.red("Overdue") : pc.green("On time")) : pc.gray("No due date");
+
+	const dateInfo = options?.showDate ? ` ${dueDateString} (${daysRemaining} - ${daysLeft})` : "";
+
 
 	console.log(
-		`${color(`[${c.type.toUpperCase()}]`)} ${pc.bold(c.message)}\n  ↪ ${pc.gray(c.filePath)}:${pc.yellow(c.line.toString())}${c.id ? ` ${pc.magenta(`#${c.id}`)}` : ""}${c.severity ? ` ${pc.red(`(${c.severity})`)}` : ""}${c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : ""}\n  ${dueDateString} (${daysToDueDate !== null ? `${daysToDueDate} days left` : "No due date"})`,
+		`${type} ${message}\n ↪ ${filePath}:${line}${c.id ? ` ${id}` : ""}${severity} ${tags}\n ${dateInfo}`,
 	);
 };

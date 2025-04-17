@@ -10,3 +10,8 @@ export type CLIScanOptions = {
 	path: string;
 	tags?: string;
 };
+
+export type PrintOptions = {
+	table?: boolean;
+	showDate?: boolean;
+}

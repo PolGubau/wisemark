@@ -1,4 +1,4 @@
-import type { CLIScanOptions } from "./types";
+import type { CLIScanOptions, PrintOptions } from "./types";
 import { filterComments } from "./filter";
 import { printResults } from "../../utils/printer";
 import { scanProject } from "../../utils/scan-all";
@@ -31,10 +31,15 @@ export const listAndFilter = async (options: CLIScanOptions) => {
 	};
 };
 
-export async function scanAll(options: CLIScanOptions) {
+export async function scanAll(options: CLIScanOptions & PrintOptions) {
 	validateParams(options);
 
 	const { comments, metadata } = await listAndFilter(options);
+
+	if (options.json && options.table) {
+		console.error("You can't use --json and --table at the same time.");
+		process.exit(1);
+	}
 
 	if (options.json) {
 		// delete the fields that are undefined

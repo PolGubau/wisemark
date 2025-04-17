@@ -9,7 +9,11 @@ const typeColor: Record<Type, (x: string) => string> = {
 	question: pc.cyan,
 };
 
-export function printResults(comments: Comment[], milliseconds: number) {
+type Options = {
+	table?: boolean;
+}
+
+export function printResults(comments: Comment[], milliseconds: number, options?: Options) {
 	if (comments.length === 0) {
 		console.log(pc.green(`✅ No wisemark comments found in ${milliseconds}ms`));
 		return;
