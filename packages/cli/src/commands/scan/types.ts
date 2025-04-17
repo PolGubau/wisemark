@@ -8,10 +8,7 @@ export type CLIScanOptions = {
 	withDueDate?: boolean;
 	cwd: string;
 	path: string;
-	tags?: string;
+	tags?: string; table?: boolean;
+	showDate?: boolean;
 };
 
-export type PrintOptions = {
-	table?: boolean;
-	showDate?: boolean;
-}

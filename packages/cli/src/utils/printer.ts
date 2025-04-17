@@ -1,8 +1,9 @@
 import type { Comment, Type } from "@wisemark/core";
 import pc from "picocolors";
 import { printComment } from "./prints/printComment";
+import { printCommentsAsTable } from "./prints/printCommentsAsTable";
 
-const typeColor: Record<Type, (x: string) => string> = {
+export const typeColor: Record<Type, (x: string) => string> = {
 	note: pc.blue,
 	todo: pc.yellow,
 	fixme: pc.red,
@@ -18,11 +19,16 @@ export function printResults(comments: Comment[], milliseconds: number, options?
 		console.log(pc.green(`✅ No wisemark comments found in ${milliseconds}ms`));
 		return;
 	}
-
-	for (const c of comments) {
-		const color = typeColor[c.type] ?? ((x: string) => x);
-		printComment(c, color);
+	if (options?.table) {
+		printCommentsAsTable(comments);
+	} else {
+		for (const c of comments) {
+			const color = typeColor[c.type] ?? ((x: string) => x);
+			printComment(c, color);
+		}
 	}
+
+
 	console.log(`\n
 ${pc.green(`✅ Found ${comments.length} wisemark comments in ${milliseconds}ms`)}
 	
