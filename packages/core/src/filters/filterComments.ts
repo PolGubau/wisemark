@@ -1,14 +1,13 @@
-import type { Comment } from "@wisemark/core";
-import type { CLIScanOptions } from "./types";
+import type { Comment, FilterOptions } from "../types";
 
 export function filterComments(
 	comments: Comment[],
-	options: CLIScanOptions,
+	options: FilterOptions,
 ): Comment[] {
 	const tagSet = options.tags?.split(",") ?? null;
 
 	return comments.filter((c) => {
-		if (options.withDueDate && !c.due) return false;
+		if (options.hasDueDate && !c.due) return false;
 		if (options.due && c.due !== options.due) return false;
 		if (options.type && c.type !== options.type) return false;
 		if (options.severity && c.severity !== options.severity) return false;

@@ -1,6 +1,7 @@
-import { type Comment, type Severity, type Type, typesRegex } from "./types";
+import { type Comment, type Severity, type Type, typesRegex } from "../types";
+
 const extractField = (raw: string, key: string): string | undefined => {
-	const match = raw.match(new RegExp(`${key}:([^\\s]+)`));
+	const match = RegExp(new RegExp(`${key}:([^\\s]+)`)).exec(raw);
 	return match?.[1];
 };
 
@@ -8,10 +9,10 @@ const extractTags = (raw: string): string[] =>
 	extractField(raw, "tags")?.split(",") ?? [];
 
 export function scanFile(
-	fileContent: string,
-	filePath = "unknown",
+	content: string,
+	path = "unknown",
 ): Comment[] {
-	const lines = fileContent.split("\n");
+	const lines = content.split("\n");
 	const comments: Comment[] = [];
 
 	lines.forEach((line, index) => {
@@ -19,7 +20,7 @@ export function scanFile(
 			Type,
 			RegExp,
 		][]) {
-			const match = line.match(regex);
+			const match = RegExp(regex).exec(line);
 			if (!match) continue;
 
 			const raw = match[1] ?? "";
@@ -37,15 +38,8 @@ export function scanFile(
 				tags: extractTags(metaPart),
 				author: extractField(metaPart, "author"),
 				due: extractField(metaPart, "due"),
-				status: extractField(metaPart, "status") as
-					| "open"
-					| "closed"
-					| "in-progress",
-				created: extractField(metaPart, "created"),
-				related: extractField(metaPart, "related"),
-				context: extractField(metaPart, "context"),
 				message: message.trim(),
-				filePath,
+				path,
 				type,
 				line: index + 1,
 			});

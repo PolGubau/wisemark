@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { scanFile } from "../src/parser";
-
+import { scanFile } from "../src/scanner/scanFile";
+ 
 describe("scanFile", () => {
 	it("detects easy comments", () => {
 		const input = `
@@ -18,7 +18,7 @@ describe("scanFile", () => {
 			tags: ["bug", "refactor"],
 			message: "test",
 			type: "note",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 2,
 		});
 
@@ -28,7 +28,7 @@ describe("scanFile", () => {
 			tags: [],
 			message: "Fix the button color",
 			type: "fixme",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 4,
 		});
 		expect(result[0].type).toBe("note");
@@ -49,7 +49,7 @@ describe("scanFile", () => {
 			tags: ["bug", "refactor"],
 			message: "test",
 			type: "todo",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 2,
 		});
 	});

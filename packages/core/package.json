@@ -12,10 +12,9 @@
   },
   "exports": {
     ".": {
-      "browser": "./dist/browser/core.production.mjs",
       "types": "./dist/esm/index.d.mts",
       "import": "./dist/esm/index.mjs",
-      "require": "./dist/core/index.cjs"
+      "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
   },
