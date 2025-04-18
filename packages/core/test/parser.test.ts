@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { parseComments } from "../src/parser";
+import { scanFile } from "../src/parser";
 
-describe("parseComments", () => {
+describe("scanFile", () => {
 	it("detects easy comments", () => {
 		const input = `
 // @note test -- id:foo severity:high tags:bug,refactor
@@ -9,7 +9,7 @@ describe("parseComments", () => {
 // @fixme Fix the button color 
 `;
 
-		const result = parseComments(input, "example.ts");
+		const result = scanFile(input, "example.ts");
 
 		expect(result).toHaveLength(2);
 		expect(result[0]).toMatchObject({
@@ -40,7 +40,7 @@ describe("parseComments", () => {
     @todo test -- id:foo severity:high tags:bug,refactor
     */`;
 
-		const result = parseComments(input, "example.ts");
+		const result = scanFile(input, "example.ts");
 
 		expect(result).toHaveLength(1);
 		expect(result[0]).toMatchObject({

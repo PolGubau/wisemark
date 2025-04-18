@@ -1,6 +1,7 @@
 import fg from "fast-glob";
 import { readFile } from "node:fs/promises";
-import { scanFile, type Comment } from "@wisemark/core";
+import { scanFile } from "./scanFile";
+import type { Comment } from "@wisemark/core";
 
 const extensions = ["ts", "tsx", "js", "jsx", "mjs", "cjs"];
 
@@ -10,16 +11,13 @@ export async function scanProject(basePath: string): Promise<Comment[]> {
 		ignore: ["node_modules", "dist", "build", "**/*.d.ts"],
 		absolute: true,
 	});
-	const results: Comment[] = [];
 
-	await Promise.all(
+	const allComments = await Promise.all(
 		files.map(async (file) => {
 			const content = await readFile(file, "utf-8");
-			const comments = scanFile(content, file);
-			results.push(...comments);
+			return scanFile(content, file);
 		}),
 	);
 
-	return results;
+	return allComments.flat();
 }
-

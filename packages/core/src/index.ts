@@ -1,3 +1,3 @@
 export type { Type, Severity, Comment } from "./types";
 export { types, severities } from "./types";
-export { parseComments } from "./parser";
+export { scanFile } from "./parser";

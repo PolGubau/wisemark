@@ -1,2 +1,5 @@
 packages:
-  - packages/* # all packages in the packages directory
+  - packages/core
+  - packages/cli
+  - packages/vscode
+
