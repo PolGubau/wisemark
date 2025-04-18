@@ -17,7 +17,7 @@ export const printComment = (c: Comment, color: (c: string) => string, options?:
 
 	const type = color(`[${c.type.toUpperCase()}]`)
 	const message = pc.bold(c.message.trim());
-	const filePath = c.filePath ? pc.gray(c.filePath) : pc.gray("File not found");
+	const path = c.path ? pc.gray(c.path) : pc.gray("File not found");
 	const line = pc.yellow(c.line.toString());
 	const id = c.id ? pc.magenta(`#${c.id}`) : '';
 	const severity = c.severity ? pc.red(`(${c.severity})`) : '';
@@ -30,6 +30,6 @@ export const printComment = (c: Comment, color: (c: string) => string, options?:
 
 
 	console.log(
-		`${type} ${message}\n ↪ ${filePath}:${line}${c.id ? ` ${id}` : ""}${severity} ${tags}\n ${dateInfo}`,
+		`${type} ${message}\n ↪ ${path}:${line}${c.id ? ` ${id}` : ""}${severity} ${tags}\n ${dateInfo}`,
 	);
 };

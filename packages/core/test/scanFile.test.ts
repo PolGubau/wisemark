@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { parseComments } from "../src/parser";
-
-describe("parseComments", () => {
+import { scanFile } from "../src/scanner/scanFile";
+ 
+describe("scanFile", () => {
 	it("detects easy comments", () => {
 		const input = `
 // @note test -- id:foo severity:high tags:bug,refactor
@@ -9,7 +9,7 @@ describe("parseComments", () => {
 // @fixme Fix the button color 
 `;
 
-		const result = parseComments(input, "example.ts");
+		const result = scanFile(input, "example.ts");
 
 		expect(result).toHaveLength(2);
 		expect(result[0]).toMatchObject({
@@ -18,7 +18,7 @@ describe("parseComments", () => {
 			tags: ["bug", "refactor"],
 			message: "test",
 			type: "note",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 2,
 		});
 
@@ -28,7 +28,7 @@ describe("parseComments", () => {
 			tags: [],
 			message: "Fix the button color",
 			type: "fixme",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 4,
 		});
 		expect(result[0].type).toBe("note");
@@ -40,7 +40,7 @@ describe("parseComments", () => {
     @todo test -- id:foo severity:high tags:bug,refactor
     */`;
 
-		const result = parseComments(input, "example.ts");
+		const result = scanFile(input, "example.ts");
 
 		expect(result).toHaveLength(1);
 		expect(result[0]).toMatchObject({
@@ -49,7 +49,7 @@ describe("parseComments", () => {
 			tags: ["bug", "refactor"],
 			message: "test",
 			type: "todo",
-			filePath: "example.ts",
+			path: "example.ts",
 			line: 2,
 		});
 	});

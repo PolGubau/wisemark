@@ -1,9 +1,8 @@
-import { severities, types } from "@wisemark/core";
-import type { CLIScanOptions } from "./types";
-import fs from "node:fs";
+import { severities, types, type ScanFlags} from "@wisemark/core";
+ import fs from "node:fs";
 import pc from "picocolors";
 
-export function validateParams(options: CLIScanOptions) {
+export function validateParams(options: ScanFlags) {
 	let shouldExit = false;
 
 	// if table and json are true, warn (the table will be ignored)

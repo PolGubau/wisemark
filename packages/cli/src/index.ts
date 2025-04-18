@@ -7,7 +7,7 @@ import { lint } from "./commands/lint/lint.action";
 const cli = cac("wisemark");
 
 cli
-	.command("scan", "Scan the project for comments")
+	.command("", "Scan the project for comments")
 	.alias("s")
 	.action(async (o) => scanAll(o));
 addScanFilters(cli.commands[0]);
