@@ -1,4 +1,2 @@
 packages:
-  - packages/core
-  - packages/cli
-
+  - packages/* # all packages in the packages directory
