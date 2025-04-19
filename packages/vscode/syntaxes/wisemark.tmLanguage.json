@@ -1,0 +1,29 @@
+{
+  "scopeName": "source.wisemark",
+  "name": "Wisemark",
+  "patterns": [
+    {
+      "name": "keyword.note.wisemark",
+      "match": "//\\s*@note\\b"
+    },
+    {
+      "name": "keyword.todo.wisemark",
+      "match": "//\\s*@todo\\b"
+    },
+    {
+      "name": "keyword.fixme.wisemark",
+      "match": "//\\s*@fixme\\b"
+    },
+    {
+      "name": "keyword.question.wisemark",
+      "match": "//\\s*@question\\b"
+    },
+    {
+      "name": "keyword.refactor.wisemark",
+      "match": "//\\s*@refactor\\b"
+    }
+  ],
+  "repository": {},
+  "fileTypes": ["js", "ts", "jsx", "tsx"],
+  "uuid": "wisemark-grammar"
+}
