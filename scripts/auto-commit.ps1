@@ -14,7 +14,6 @@ if (-not $gitPath) {
     Write-Host "Git no está instalado. Por favor, instálalo primero."
     exit 1
 }
-
 # Añade todos los cambios al staging
 git add .
 
