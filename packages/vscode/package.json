@@ -12,12 +12,121 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "wisemark",
+          "title": "Wisemark",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "wisemark": [
+        {
+          "id": "commentExplorer",
+          "icon": "media/comment.svg",
+          "name": "Comments"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "wisemark.insertNoteComment",
+        "key": "ctrl+alt+n",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wisemark.insertTodoComment",
+        "key": "ctrl+alt+t",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wisemark.insertFixmeComment",
+        "key": "ctrl+alt+f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wisemark.insertQuestionComment",
+        "key": "ctrl+alt+q",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "wisemark.insertRefactorComment",
+        "key": "ctrl+alt+r",
+        "when": "editorTextFocus"
+      }
+    ],
     "commands": [
       {
-        "command": "wisemark.helloWorld",
-        "title": "Hello World"
+        "command": "wisemark.scan",
+        "title": "Scan Wisemark commands 🔍"
+      },
+      {
+        "command": "wisemark.refresh",
+        "title": "Refresh Wisemark commands 🔄"
+      },
+      {
+        "command": "wisemark.openComment",
+        "title": "Select and open a specific comment 📜"
       }
-    ]
+    ],
+    "grammars": [
+      {
+        "language": "typescript",
+        "scopeName": "source.wisemark",
+        "path": "./syntaxes/wisemark.tmLanguage.json",
+        "injectTo": [
+          "source.ts",
+          "source.tsx",
+          "source.js",
+          "source.jsx"
+        ]
+      }
+    ],
+  "configurationDefaults": {
+      "[default]": {
+        "editor.tokenColorCustomizations": {
+          "textMateRules": [
+            {
+              "scope": "keyword.note.wisemark",
+              "settings": {
+                "foreground": "#ff6347", 
+                "fontStyle": "italic"
+              }
+            },
+            {
+              "scope": "keyword.todo.wisemark",
+              "settings": {
+                "foreground": "#e5c07b",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "scope": "keyword.fixme.wisemark",
+              "settings": {
+                "foreground": "#f0f0f0",
+                "fontStyle": "italic"
+              }
+            },
+            {
+              "scope": "keyword.refactor.wisemark",
+              "settings": {
+                "foreground": "#00bcd4",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "scope": "keyword.question.wisemark",
+              "settings": {
+                "foreground": "#8be9fd",
+                "fontStyle": "italic"
+              }
+            }
+          ]
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

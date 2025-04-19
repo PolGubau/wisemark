@@ -1,27 +1,36 @@
 {
   "name": "@wisemark/core",
   "version": "1.0.1",
-  "main": "index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/esm/index.mjs",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/esm/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/esm/index.d.mts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./package.json": "./package.json"
-  },
-  "keywords": [],
+
+  "keywords": [
+    "wisemark",
+    "core",
+    "typescript"  ],
   "author": "Pol Gubau Amores",
   "license": "ISC",
-  "type": "commonjs",
   "description": "",
   "devDependencies": {
     "@types/node": "^22.14.1",

@@ -1,4 +1,4 @@
-export const types = ["todo", "fixme", "note", "question"] as const;
+export const types = ["todo", "fixme", "note", "question", "refactor"] as const;
 export type Type = (typeof types)[number];
 
 export const severities = ["low", "medium", "high"] as const;
@@ -23,6 +23,7 @@ export const typesRegex: Record<Type, RegExp> = {
 	todo: /@todo\s+(.+)/,
 	fixme: /@fixme\s+(.+)/,
 	question: /@question\s+(.+)/,
+	refactor: /@refactor\s+(.+)/,
 };
 
 export type Metadata = {
