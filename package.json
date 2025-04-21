@@ -1,5 +1,5 @@
 {
-  "name": "@polgubau/fuzzy",
+  "name": "wisemark",
   "publishConfig": {
     "access": "public"
   },
@@ -7,9 +7,9 @@
   "main": "index.js",
   "keywords": [
     "typescript",
-    "fuzzy",
+    "debug",
     "polgubau",
-    "polgubau/fuzzy"
+    "comments"
   ],
   "author": "Pol Gubau Amores <gubaupol@gmail.com> (https://polgubau.com)",
   "maintainers": [
