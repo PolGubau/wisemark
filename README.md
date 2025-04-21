@@ -48,7 +48,9 @@ A comment can be as simple as:
 // @<type> <message>
 ```
 
-```ts title="Example.ts"
+Examples:
+
+```ts name="Example.ts"
 // @todo Add a test for negative numbers
 // @fixme Fix the bug in the code
 // @note This is a note
