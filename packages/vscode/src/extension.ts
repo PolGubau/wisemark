@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { listAndFilter, type Type } from "@wisemark/core";
 import type { TreeItemData } from "./tree/types";
-import { CommentProvider } from "./tree/CommentProvider";
+import { CommentProvider, Grouping } from "./tree/CommentProvider";
 import { CommentTreeItem } from "./tree/CommentTreeItem";
 
 
@@ -27,6 +27,13 @@ const defaultIgnore = ["node_modules", "dist", "build", "**/*.d.ts", "**/*.map",
     }));
     commentProvider.refresh(mapped);
   };
+
+  const scanAndNotify = async () => {
+    scanComments();
+    vscode.window.showInformationMessage('Comments scanned successfully! 🔍');
+     
+  }
+
 
   // Llamar al escaneo de comentarios al activarse la extensión
   scanComments();
@@ -85,7 +92,9 @@ const insertNoteComment= async (type:Type) => {
   editor.insertSnippet(snippet);
 }
 
-
+const toggleGrouping = async (provider: CommentProvider) => {
+    provider.nextGrouping()
+ 	}
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -98,6 +107,13 @@ const insertNoteComment= async (type:Type) => {
     ),
     vscode.commands.registerCommand(
       "wisemark.scan", scanComments
+    ),
+    vscode.commands.registerCommand(
+      "wisemark.refresh", scanAndNotify
+    ),
+    vscode.commands.registerCommand(
+      "wisemark.toggleGrouping",
+      () => toggleGrouping(commentProvider)
     ),
     vscode.commands.registerCommand(
       "wisemark.insertTodoComment", ()=>insertNoteComment("todo")

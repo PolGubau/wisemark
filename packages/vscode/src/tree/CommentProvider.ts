@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import type { TreeItemData } from './types';
-import { CommentTreeItem } from './CommentTreeItem';
+import { CommentTreeItem, getIcon } from './CommentTreeItem';
+import type { Type } from '@wisemark/core';
  
  
 
@@ -34,6 +35,16 @@ export class CommentProvider implements vscode.TreeDataProvider<vscode.TreeItem>
     this._onDidChangeTreeData.fire(undefined);
   }
 
+  nextGrouping() {
+    const next = {
+      [Grouping.None]: Grouping.Type,
+      [Grouping.Type]: Grouping.File,
+      [Grouping.File]: Grouping.None,
+    };
+    this.grouping = next[this.grouping];
+    this._onDidChangeTreeData.fire(undefined);
+  }
+
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;
   }
@@ -42,7 +53,14 @@ private getGroupedItems(): vscode.TreeItem[] {
     const map = this.getGroupedMap();
     return Array.from(map.keys()).map(key => {
       const item = new vscode.TreeItem(key, vscode.TreeItemCollapsibleState.Collapsed);
-      item.contextValue = 'group'; // opcional para menú contextual
+    
+    
+
+
+  if(this.grouping === Grouping.Type) {
+						item.iconPath =	getIcon(key as Type);
+						}
+      item.contextValue = 'group'; 
       return item;
     });
   }
@@ -73,25 +91,8 @@ async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
   if (!this.comments.length) return [new vscode.TreeItem('No comments found.')];
 
   if (!element) {
-    // raíz
-      const searchButton = new vscode.TreeItem('🔎 Search Comments');
-  searchButton.command = { command: 'wisemark.openCommentQuickPick', title: 'Search Comments' };
-  searchButton.iconPath = new vscode.ThemeIcon('search');
-  searchButton.contextValue = 'searchButton';
- 
-    const groupOptions = new vscode.TreeItem('🔃 Change Grouping');
-    groupOptions.command = { command: 'wisemark.toggleGrouping', title: 'Toggle Grouping' };
-    groupOptions.iconPath = new vscode.ThemeIcon('list-flat');
-
-    const resetButton = new vscode.TreeItem('🔄 Reset & Rescan');
-    resetButton.command = { command: 'wisemark.scan', title: 'Rescan Comments' };
-    resetButton.iconPath = new vscode.ThemeIcon('refresh');
-
-    const commentItems = this.getGroupedItems();
-    const footer = new vscode.TreeItem(`🧮 Total comments: ${this.comments.length}`);
-    footer.collapsibleState = vscode.TreeItemCollapsibleState.None;
-
-    return [searchButton, groupOptions, resetButton, ...commentItems, footer];
+    const commentItems = this.getGroupedItems(); 
+    return [...commentItems];
   }
 
   // hijos de un grupo

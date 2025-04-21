@@ -14,7 +14,7 @@ export const typeEmoji: Record<Type, string> = {
 type Options = {
 	showDate: boolean;
 };
-export const printComment = (c: Comment, color: (c: string) => string, options?: Options) => {
+export const printComment = (c: Comment, options?: Options) => {
 	// days to due date
 	const dueDate = c.due ? new Date(c.due) : null;
 	const today = new Date();
