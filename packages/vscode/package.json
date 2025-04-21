@@ -195,63 +195,7 @@
 				"icon": "$(comment)",
 				"title": "Insert Refactor Comment 🔄"
 			}
-		],
-		"grammars": [
-			{
-				"language": "typescript",
-				"scopeName": "source.wisemark",
-				"path": "./syntaxes/wisemark.tmLanguage.json",
-				"injectTo": [
-					"source.ts",
-					"source.tsx",
-					"source.js",
-					"source.jsx"
-				]
-			}
-		],
-		"configurationDefaults": {
-			"[default]": {
-				"editor.tokenColorCustomizations": {
-					"textMateRules": [
-						{
-							"scope": "keyword.note.wisemark",
-							"settings": {
-								"foreground": "#ff6347",
-								"fontStyle": "italic"
-							}
-						},
-						{
-							"scope": "keyword.todo.wisemark",
-							"settings": {
-								"foreground": "#e5c07b",
-								"fontStyle": "bold"
-							}
-						},
-						{
-							"scope": "keyword.fixme.wisemark",
-							"settings": {
-								"foreground": "#f0f0f0",
-								"fontStyle": "italic"
-							}
-						},
-						{
-							"scope": "keyword.refactor.wisemark",
-							"settings": {
-								"foreground": "#00bcd4",
-								"fontStyle": "bold"
-							}
-						},
-						{
-							"scope": "keyword.question.wisemark",
-							"settings": {
-								"foreground": "#8be9fd",
-								"fontStyle": "italic"
-							}
-						}
-					]
-				}
-			}
-		}
+		]
 	},
 	"vsce": {
 		"dependencies": false
