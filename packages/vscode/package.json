@@ -1,6 +1,6 @@
 {
 	"name": "wisemark",
-	"displayName": "wisemark",
+	"displayName": "Wisemark",
 	"description": "Intelligent commands scanner for you projects",
 	"version": "1.0.0",
 	"engines": {
@@ -14,6 +14,7 @@
 		"url": "https://github.com/PolGubau/markwise",
 		"directory": "packages/vscode"
 	},
+	"publisher": "polgubauamores",
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [
@@ -242,7 +243,8 @@
 
 	"scripts": {
 		"vscode:prepublish": "pnpm run compile",
-		"compile": "tsc -p ./",
+		"prepare": "cd ../core && pnpm build && cd ../vscode",
+		"compile": "pnpm prepare && tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "pnpm run compile && pnpm run lint",
 		"lint": "eslint src",
