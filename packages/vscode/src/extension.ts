@@ -1,48 +1,10 @@
 import * as vscode from "vscode";
 import { listAndFilter, type Type } from "@wisemark/core";
+import type { TreeItemData } from "./tree/types";
+import { CommentProvider } from "./tree/CommentProvider";
+import { CommentTreeItem } from "./tree/CommentTreeItem";
 
-type TreeItemData = {
-  label: string;
-  filePath: string;
-  line: number;
-  type: string;
-  severity: string;
-};
 
-class CommentTreeItem extends vscode.TreeItem {
-  constructor(public readonly data: TreeItemData) {
-    super(`[${data.type}] ${data.label}`, vscode.TreeItemCollapsibleState.None);
-    this.tooltip = `${data.label} (${data.severity}) in ${data.filePath}:${data.line}`;
-    this.command = {
-      command: "wisemark.openCommentOnClick",
-      title: "Open Comment",
-      arguments: [data],
-    };
-    this.description = `${data.filePath.split("/").pop()}:${data.line}`;
-  }
-}
-
-class CommentProvider implements vscode.TreeDataProvider<CommentTreeItem> {
-  private readonly _onDidChangeTreeData = new vscode.EventEmitter<
-    CommentTreeItem | undefined
-  >();
-  readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
-
-  private comments: TreeItemData[] = [];
-
-  refresh(comments: TreeItemData[]) {
-    this.comments = comments;
-    this._onDidChangeTreeData.fire(undefined);
-  }
-
-  getTreeItem(element: CommentTreeItem): vscode.TreeItem {
-    return element;
-  }
-
-  getChildren(): Thenable<CommentTreeItem[]> {
-    return Promise.resolve(this.comments.map((c) => new CommentTreeItem(c)));
-  }
-}
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -91,16 +53,20 @@ const defaultIgnore = ["node_modules", "dist", "build", "**/*.d.ts", "**/*.map",
       editor.selection = new vscode.Selection(pos, pos);
 
       editor.revealRange(new vscode.Range(pos, pos));
-    }
+     }
   };  
-
+function isCommentTreeItem(item: vscode.TreeItem): item is CommentTreeItem {
+  return item instanceof CommentTreeItem;
+}
 function openCommentQuickPick(provider: CommentProvider) {
   return async () => {
-    const items = (await provider.getChildren()).map(item => ({
-      label: item.data.label,
-      description: `${item.data.filePath.split('/').pop()}:${item.data.line}`,
-      item,
-    }));
+  const items = (await provider.getChildren())
+  .filter(isCommentTreeItem)
+  .map(item => ({
+    label: item.data.label,
+    description: `${item.data.filePath.split('/').pop()}:${item.data.line}`,
+    item,
+  }));
 
     const selected = await vscode.window.showQuickPick(items, {
       placeHolder: 'Select a comment to open',

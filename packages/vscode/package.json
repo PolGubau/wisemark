@@ -30,6 +30,15 @@
         }
       ]
     },
+    "menus": {
+    "view/title": [
+      {
+        "command": "wisemark.openCommentQuickPick",
+        "when": "view == commentExplorer",
+        "group": "navigation"
+      }
+    ]
+  },
     "keybindings": [
       {
         "command": "wisemark.insertNoteComment",
@@ -67,8 +76,31 @@
         "title": "Refresh Wisemark commands 🔄"
       },
       {
-        "command": "wisemark.openComment",
-        "title": "Select and open a specific comment 📜"
+        "command": "wisemark.openCommentQuickPick",
+        "title": "Select and open a specific comment 📜",
+        "shortTitle": "Select and open a comment 📜",
+        "category": "Wisemark",
+        "icon": "$(search)"
+      },
+      {
+        "command": "wisemark.insertNoteComment",
+        "title": "Insert Note Comment 📝"
+      },
+      {
+        "command": "wisemark.insertTodoComment",
+        "title": "Insert Todo Comment ✅"
+      },
+      {
+        "command": "wisemark.insertFixmeComment",
+        "title": "Insert Fixme Comment ❗"
+      },
+      {
+        "command": "wisemark.insertQuestionComment",
+        "title": "Insert Question Comment ❓"
+      },
+      {
+        "command": "wisemark.insertRefactorComment",
+        "title": "Insert Refactor Comment 🔄"
       }
     ],
     "grammars": [
