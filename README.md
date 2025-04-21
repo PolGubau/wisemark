@@ -31,7 +31,7 @@ Using the main types:
 | @refactor | A suggestion to improve the code. |
 
 Wisemark will automatically detect these comments and allow you to manage them.
-![Scan Command](public/example.png)
+![Scan Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/example.png?raw=true)
 
 # Wisemark - Intelligent Command Scanner for Your Projects
 
@@ -80,17 +80,17 @@ Once installed, you'll be able to use Wisemark to:
 2. **Command Scanning**:  
    To scan for all comments, run the **Scan Wisemark Commands** command from the command palette (`Ctrl+Shift+P` > **Scan Wisemark commands**).
 
-   ![Scan Command](public/example.png)
+   ![Scan Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/example.png?raw=true)
 
 3. **Group Comments**:  
    Toggle grouping for better visibility and organization of your comments using the **Toggle Grouping** command.
 
-   ![Grouping Command](public/fileGroup.png)
+   ![Grouping Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/fileGroup.png?raw=true)
 
 4. **Navigate Between Comments**:  
    Use the **Select and Open a Comment** command to quickly navigate between comments in your code.
 
-   ![Navigate Comments](public/list.png)
+   ![Navigate Comments](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/list.png?raw=true)
 
 ## Configuration
 
@@ -108,19 +108,19 @@ To customize, open the VSCode settings and modify the `"editor.tokenColorCustomi
 
 Wisemark also predicts the most used comments based on your previous usage, helping you streamline the process.
 
-![Predictive Feature](public/predict.png)
+![Predictive Feature](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/predict.png?raw=true)
 
 ## Quick Pick for Commands
 
 For even faster insertion of comments, use the **Quick Pick** functionality, which suggests the best options for your current task.
 
-![Quick Pick](public/quickpick.png)
+![Quick Pick](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/quickpick.png?raw=true)
 
 ## Group Comments by Type
 
 Easily group your comments by type for better organization.
 
-![Group Comments](public/typeGroup.png)
+![Group Comments](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/typeGroup.png?raw=true)
 
 ## Contributing
 
