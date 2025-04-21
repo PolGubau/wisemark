@@ -2,6 +2,7 @@
 	"name": "wisemark",
 	"displayName": "Wisemark",
 	"description": "Intelligent commands scanner for you projects",
+	"icon": "icon.png",
 	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.99.0"
