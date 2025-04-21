@@ -1,153 +1,287 @@
 {
-  "name": "wisemark",
-  "displayName": "wisemark",
-  "description": "Intelligent commands scanner for you projects",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.99.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "wisemark",
-          "title": "Wisemark",
-          "icon": "media/icon.svg"
-        }
-      ]
-    },
-    "views": {
-      "wisemark": [
-        {
-          "id": "commentExplorer",
-          "icon": "media/comment.svg",
-          "name": "Comments"
-        }
-      ]
-    },
-    "keybindings": [
-      {
-        "command": "wisemark.insertNoteComment",
-        "key": "ctrl+alt+n",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "wisemark.insertTodoComment",
-        "key": "ctrl+alt+t",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "wisemark.insertFixmeComment",
-        "key": "ctrl+alt+f",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "wisemark.insertQuestionComment",
-        "key": "ctrl+alt+q",
-        "when": "editorTextFocus"
-      },
-      {
-        "command": "wisemark.insertRefactorComment",
-        "key": "ctrl+alt+r",
-        "when": "editorTextFocus"
-      }
-    ],
-    "commands": [
-      {
-        "command": "wisemark.scan",
-        "title": "Scan Wisemark commands 🔍"
-      },
-      {
-        "command": "wisemark.refresh",
-        "title": "Refresh Wisemark commands 🔄"
-      },
-      {
-        "command": "wisemark.openComment",
-        "title": "Select and open a specific comment 📜"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "typescript",
-        "scopeName": "source.wisemark",
-        "path": "./syntaxes/wisemark.tmLanguage.json",
-        "injectTo": [
-          "source.ts",
-          "source.tsx",
-          "source.js",
-          "source.jsx"
-        ]
-      }
-    ],
-  "configurationDefaults": {
-      "[default]": {
-        "editor.tokenColorCustomizations": {
-          "textMateRules": [
-            {
-              "scope": "keyword.note.wisemark",
-              "settings": {
-                "foreground": "#ff6347", 
-                "fontStyle": "italic"
-              }
-            },
-            {
-              "scope": "keyword.todo.wisemark",
-              "settings": {
-                "foreground": "#e5c07b",
-                "fontStyle": "bold"
-              }
-            },
-            {
-              "scope": "keyword.fixme.wisemark",
-              "settings": {
-                "foreground": "#f0f0f0",
-                "fontStyle": "italic"
-              }
-            },
-            {
-              "scope": "keyword.refactor.wisemark",
-              "settings": {
-                "foreground": "#00bcd4",
-                "fontStyle": "bold"
-              }
-            },
-            {
-              "scope": "keyword.question.wisemark",
-              "settings": {
-                "foreground": "#8be9fd",
-                "fontStyle": "italic"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "pnpm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "@types/vscode": "^1.99.0",
-    "@typescript-eslint/eslint-plugin": "^8.28.0",
-    "@typescript-eslint/parser": "^8.28.0",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1",
-    "eslint": "^9.23.0",
-    "typescript": "^5.8.2"
-  },
-  "dependencies": {
-    "@wisemark/core": "workspace:*"
-  }
+	"name": "wisemark",
+	"displayName": "Wisemark",
+	"description": "Intelligent commands scanner for you projects",
+	"icon": "icon.png",
+	"version": "1.0.1",
+	"engines": {
+		"vscode": "^1.99.0"
+	},
+	"categories": [
+		"Keymaps",
+		"Debuggers",
+		"Snippets",
+		"Other"
+	],
+	"activationEvents": [
+		"onView:wisemark.commentExplorer",
+		"onStartupFinished"
+	],
+	"main": "./dist/extension.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/PolGubau/markwise",
+		"directory": "packages/vscode"
+	},
+	"publisher": "polgubauamores",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "wisemark",
+					"title": "Wisemark",
+					"icon": "$(mention)"
+				}
+			]
+		},
+		"views": {
+			"wisemark": [
+				{
+					"id": "commentExplorer",
+					"icon": "$(mention)",
+					"name": "Comments"
+				}
+			]
+		},
+		"submenus": [
+			{
+				"label": "Wisemark",
+				"description": "Wisemark commands",
+				"id": "wisemark.submenu",
+				"title": "Wisemark",
+				"icon": "$(comment-discussion)"
+			}
+		],
+		"menus": {
+			"wisemark.submenu": [
+				{
+					"command": "wisemark.insertNoteComment",
+					"when": "editorTextFocus",
+					"group": "1_wsm"
+				},
+				{
+					"command": "wisemark.insertTodoComment",
+					"when": "editorTextFocus",
+					"group": "1_wsm"
+				},
+				{
+					"command": "wisemark.insertFixmeComment",
+					"when": "editorTextFocus",
+					"group": "1_wsm"
+				},
+				{
+					"command": "wisemark.insertQuestionComment",
+					"when": "editorTextFocus",
+					"group": "1_wsm"
+				},
+				{
+					"command": "wisemark.insertRefactorComment",
+					"when": "editorTextFocus",
+					"group": "1_wsm"
+				}
+			],
+			"view/title": [
+				{
+					"command": "wisemark.openCommentQuickPick",
+					"when": "view == commentExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "wisemark.toggleGrouping",
+					"when": "view == commentExplorer",
+					"group": "navigation"
+				},
+				{
+					"command": "wisemark.refresh",
+					"when": "view == commentExplorer",
+					"group": "navigation"
+				}
+			],
+			"editor/context": [
+				{
+					"submenu": "wisemark.submenu",
+					"when": "editorTextFocus",
+					"group": "2_wisemark",
+					"title": "Wisemark 🧠",
+					"icon": "$(comment-discussion)"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "wisemark.insertNoteComment",
+				"key": "ctrl+alt+n",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "wisemark.insertTodoComment",
+				"key": "ctrl+alt+t",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "wisemark.insertFixmeComment",
+				"key": "ctrl+alt+f",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "wisemark.insertQuestionComment",
+				"key": "ctrl+alt+q",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "wisemark.insertRefactorComment",
+				"key": "ctrl+alt+r",
+				"when": "editorTextFocus"
+			}
+		],
+		"commands": [
+			{
+				"command": "wisemark.scan",
+				"title": "Scan Wisemark commands 🔍",
+				"category": "Wisemark",
+				"icon": "$(search)"
+			},
+			{
+				"command": "wisemark.refresh",
+				"title": "Refresh Wisemark commands 🔄",
+				"category": "Wisemark",
+				"icon": "$(refresh)"
+			},
+			{
+				"command": "wisemark.toggleGrouping",
+				"title": "Toggle Grouping",
+				"category": "Wisemark",
+				"icon": "$(list-flat)"
+			},
+			{
+				"command": "wisemark.openCommentQuickPick",
+				"title": "Select and open a comment 📜",
+				"shortTitle": "Go to comment 📜",
+				"category": "Wisemark",
+				"icon": "$(search)"
+			},
+			{
+				"command": "wisemark.insertNoteComment",
+				"category": "Wisemark",
+				"shortTitle": "Insert Note",
+				"icon": "$(comment)",
+				"title": "Insert Note Comment 📝"
+			},
+			{
+				"command": "wisemark.insertTodoComment",
+				"category": "Wisemark",
+				"shortTitle": "Insert Todo",
+				"icon": "$(comment)",
+				"title": "Insert Todo Comment ✅"
+			},
+			{
+				"command": "wisemark.insertFixmeComment",
+				"category": "Wisemark",
+				"shortTitle": "Insert Fixme",
+				"icon": "$(comment)",
+				"title": "Insert Fixme Comment ❗"
+			},
+			{
+				"command": "wisemark.insertQuestionComment",
+				"category": "Wisemark",
+				"shortTitle": "Insert Question",
+				"icon": "$(comment)",
+				"title": "Insert Question Comment ❓"
+			},
+			{
+				"command": "wisemark.insertRefactorComment",
+				"category": "Wisemark",
+				"shortTitle": "Insert Refactor",
+				"icon": "$(comment)",
+				"title": "Insert Refactor Comment 🔄"
+			}
+		],
+		"grammars": [
+			{
+				"language": "typescript",
+				"scopeName": "source.wisemark",
+				"path": "./syntaxes/wisemark.tmLanguage.json",
+				"injectTo": [
+					"source.ts",
+					"source.tsx",
+					"source.js",
+					"source.jsx"
+				]
+			}
+		],
+		"configurationDefaults": {
+			"[default]": {
+				"editor.tokenColorCustomizations": {
+					"textMateRules": [
+						{
+							"scope": "keyword.note.wisemark",
+							"settings": {
+								"foreground": "#ff6347",
+								"fontStyle": "italic"
+							}
+						},
+						{
+							"scope": "keyword.todo.wisemark",
+							"settings": {
+								"foreground": "#e5c07b",
+								"fontStyle": "bold"
+							}
+						},
+						{
+							"scope": "keyword.fixme.wisemark",
+							"settings": {
+								"foreground": "#f0f0f0",
+								"fontStyle": "italic"
+							}
+						},
+						{
+							"scope": "keyword.refactor.wisemark",
+							"settings": {
+								"foreground": "#00bcd4",
+								"fontStyle": "bold"
+							}
+						},
+						{
+							"scope": "keyword.question.wisemark",
+							"settings": {
+								"foreground": "#8be9fd",
+								"fontStyle": "italic"
+							}
+						}
+					]
+				}
+			}
+		}
+	},
+	"vsce": {
+		"dependencies": false
+	},
+	"scripts": {
+		"prepare": "cd ../core && pnpm build && cd ../vscode",
+		"pretest": "pnpm run compile && pnpm run lint",
+		"lint": "eslint src",
+		"test": "vscode-test",
+		"compile": "pnpm check-types && pnpm prepare && node esbuild.js",
+		"check-types": "tsc --noEmit",
+		"watch": "npm-run-all -p watch:*",
+		"watch:esbuild": "node esbuild.js --watch",
+		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+		"vscode:prepublish": "npm run package",
+		"package": "npm run check-types && pnpm prepare && node esbuild.js --production"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.10",
+		"@types/node": "~20.17.30",
+		"@types/vscode": "^1.99.0",
+		"@typescript-eslint/eslint-plugin": "^8.28.0",
+		"@typescript-eslint/parser": "^8.28.0",
+		"@vscode/test-cli": "^0.0.10",
+		"@vscode/test-electron": "^2.4.1",
+		"esbuild": "^0.25.2",
+		"eslint": "^9.23.0",
+		"typescript": "^5.8.2"
+	},
+	"dependencies": {
+		"@wisemark/core": "workspace:*"
+	}
 }

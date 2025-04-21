@@ -1,11 +1,20 @@
-import type { Comment } from "@wisemark/core";
+import type { Comment, Type } from "@wisemark/core";
 import pc from "picocolors";
+import path from "node:path";
 
+export const typeEmoji: Record<Type, string> = {
+	note: "📝",
+	todo: "✅",
+	fixme: "❌",
+	question: "❓",
+	refactor: "🔧",
+	
+};
 
 type Options = {
 	showDate: boolean;
 };
-export const printComment = (c: Comment, color: (c: string) => string, options?: Options) => {
+export const printComment = (c: Comment, options?: Options) => {
 	// days to due date
 	const dueDate = c.due ? new Date(c.due) : null;
 	const today = new Date();
@@ -15,11 +24,13 @@ export const printComment = (c: Comment, color: (c: string) => string, options?:
 		: null;
 
 
-	const type = color(`[${c.type.toUpperCase()}]`)
+	const type = typeEmoji[c.type];
 	const message = pc.bold(c.message.trim());
-	const path = c.path ? pc.gray(c.path) : pc.gray("File not found");
+	const relativePath = path.relative(process.cwd(), c.path);
+const displayedPath = relativePath.split(path.sep).slice(-3).join(path.sep);  
+
+	const parsedPath = displayedPath ? pc.gray(displayedPath) : pc.gray("File not found");
 	const line = pc.yellow(c.line.toString());
-	const id = c.id ? pc.magenta(`#${c.id}`) : '';
 	const severity = c.severity ? pc.red(`(${c.severity})`) : '';
 	const tags = c.tags?.length ? ` ${pc.gray(`[${c.tags.join(", ")}]`)}` : "";
 	const dueDateString = dueDate ? `Due: ${dueDate.toLocaleDateString()}` : "";
@@ -30,6 +41,6 @@ export const printComment = (c: Comment, color: (c: string) => string, options?:
 
 
 	console.log(
-		`${type} ${message}\n ↪ ${path}:${line}${c.id ? ` ${id}` : ""}${severity} ${tags}\n ${dateInfo}`,
+		`${type} ${message}\n ↪ ${parsedPath}:${line} ${severity} ${tags}\n ${dateInfo}`,
 	);
 };
