@@ -7,7 +7,7 @@ Wisemark is a VSCode extension that helps you manage and scan intelligent comman
 - **Command Insertion**: Insert predefined comments such as:
   - Note
   - Todo
-  - FIXME
+  - Fixme
   - Question
   - Refactor
 - **Command Scanning**: Scan and manage your project for specific commands with a quick search functionality.
@@ -102,4 +102,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Enjoy organizing your code and comments with Wisemark! Happy coding! 🧠
+Enjoy organizing your code and comments with Wisemark! 
+
+
