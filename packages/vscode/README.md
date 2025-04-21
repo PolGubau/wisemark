@@ -1,4 +1,4 @@
-# Wisemark - Intelligent Command Scanner for Your Projects
+# VSCode Extension
 
 Wisemark is a VSCode extension that helps you manage and scan intelligent commands within your codebase. It enables easy insertion of different types of comments (like TODO, FIXME, Notes, Questions, Refactors) and allows you to quickly navigate and manage these comments. It also provides enhanced token coloring and grouping options for better code organization.
 
@@ -25,9 +25,9 @@ Wisemark is a VSCode extension that helps you manage and scan intelligent comman
 
 Alternatively, you can install it via the terminal:
 
-``` bash
+```bash
 ext install wisemark
-``` 
+```
 
 ## Usage
 
@@ -35,6 +35,7 @@ Once installed, you'll be able to use Wisemark to:
 
 1. **Insert Comments**:  
    You can insert the following comments in your code:
+
    - **Note**: `ctrl+alt+n`
    - **Todo**: `ctrl+alt+t`
    - **FIXME**: `ctrl+alt+f`
@@ -44,17 +45,17 @@ Once installed, you'll be able to use Wisemark to:
 2. **Command Scanning**:  
    To scan for all comments, run the **Scan Wisemark Commands** command from the command palette (`Ctrl+Shift+P` > **Scan Wisemark commands**).
 
-   ![Scan Command](public/example.png)
+   ![Scan Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/example.png?raw=true)
 
 3. **Group Comments**:  
    Toggle grouping for better visibility and organization of your comments using the **Toggle Grouping** command.
 
-   ![Grouping Command](public/fileGroup.png)
+   ![Grouping Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/fileGroup.png?raw=true)
 
 4. **Navigate Between Comments**:  
    Use the **Select and Open a Comment** command to quickly navigate between comments in your code.
 
-   ![Navigate Comments](public/list.png)
+   ![Navigate Comments](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/list.png?raw=true)
 
 ## Configuration
 
@@ -72,19 +73,34 @@ To customize, open the VSCode settings and modify the `"editor.tokenColorCustomi
 
 Wisemark also predicts the most used comments based on your previous usage, helping you streamline the process.
 
-![Predictive Feature](public/predict.png)
+![Predictive Feature](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/predict.png?raw=true)
 
 ## Quick Pick for Commands
 
 For even faster insertion of comments, use the **Quick Pick** functionality, which suggests the best options for your current task.
 
-![Quick Pick](public/quickpick.png)
+![Quick Pick](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/quickpick.png?raw=true)
 
 ## Group Comments by Type
 
 Easily group your comments by type for better organization.
 
-![Group Comments](public/typeGroup.png)
+![Group Comments](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/typeGroup.png?raw=true)
+
+# Roadmap
+
+| Feature             | Status | Description                                                                  |
+| ------------------- | ------ | ---------------------------------------------------------------------------- |
+| Core Functionality  | ✅     | Basic functionality for managing comments.                                   |
+| CLI Tool            | ✅     | Command-line interface for running Wisemark commands (Scan + due date lint). |
+| VSCode Extension    | ✅     | VSCode extension for managing comments directly in the editor.               |
+| Grouping            | ✅     | Group comments by type for better organization.                              |
+| Color Customization | ✅     | Customize colors for different comment types.                                |
+| Predictive Features | ✅     | Predict the most used comments based on previous usage.                      |
+| Quick Pick          | ✅     | Suggest the best options for your current task.                              |
+| Report Generation   | 🟧     | Generate reports of your comments.                                           |
+| Overdue Linting     | 🟧     | Fail pipelines if you have overdue comments.                                 |
+| Customizable Rules  | 🟧     | Allow users to define their own rules for comments. (wisemark.config.ts)     |
 
 ## Contributing
 
@@ -102,6 +118,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Enjoy organizing your code and comments with Wisemark! 
-
-
+Enjoy organizing your code and comments with Wisemark!

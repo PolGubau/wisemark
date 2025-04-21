@@ -3,7 +3,7 @@
 	"displayName": "Wisemark",
 	"description": "Intelligent commands scanner for you projects",
 	"icon": "icon.png",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"engines": {
 		"vscode": "^1.99.0"
 	},
@@ -195,63 +195,7 @@
 				"icon": "$(comment)",
 				"title": "Insert Refactor Comment 🔄"
 			}
-		],
-		"grammars": [
-			{
-				"language": "typescript",
-				"scopeName": "source.wisemark",
-				"path": "./syntaxes/wisemark.tmLanguage.json",
-				"injectTo": [
-					"source.ts",
-					"source.tsx",
-					"source.js",
-					"source.jsx"
-				]
-			}
-		],
-		"configurationDefaults": {
-			"[default]": {
-				"editor.tokenColorCustomizations": {
-					"textMateRules": [
-						{
-							"scope": "keyword.note.wisemark",
-							"settings": {
-								"foreground": "#ff6347",
-								"fontStyle": "italic"
-							}
-						},
-						{
-							"scope": "keyword.todo.wisemark",
-							"settings": {
-								"foreground": "#e5c07b",
-								"fontStyle": "bold"
-							}
-						},
-						{
-							"scope": "keyword.fixme.wisemark",
-							"settings": {
-								"foreground": "#f0f0f0",
-								"fontStyle": "italic"
-							}
-						},
-						{
-							"scope": "keyword.refactor.wisemark",
-							"settings": {
-								"foreground": "#00bcd4",
-								"fontStyle": "bold"
-							}
-						},
-						{
-							"scope": "keyword.question.wisemark",
-							"settings": {
-								"foreground": "#8be9fd",
-								"fontStyle": "italic"
-							}
-						}
-					]
-				}
-			}
-		}
+		]
 	},
 	"vsce": {
 		"dependencies": false
@@ -267,7 +211,8 @@
 		"watch:esbuild": "node esbuild.js --watch",
 		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
 		"vscode:prepublish": "npm run package",
-		"package": "npm run check-types && pnpm prepare && node esbuild.js --production"
+		"package": "npm run check-types && pnpm prepare && node esbuild.js --production",
+		"publish": "vsce publish"
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.10",
