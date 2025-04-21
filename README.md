@@ -32,8 +32,115 @@ Using the main types:
 
 Wisemark will automatically detect these comments and allow you to manage them.
 ![Scan Command](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/example.png?raw=true)
+This is the usual output using the VSCode extension.
 
-# Wisemark - Intelligent Command Scanner for Your Projects
+## Packages
+
+- [@wisemark/core](packages/core): The core library for Wisemark. It provides the main functionality and API for managing comments.
+- [@wisemark/cli](packages/cli): The command-line interface for Wisemark. It allows you to run Wisemark commands from the terminal.
+- [@wisemark/vscode](packages/vscode): The VSCode extension for Wisemark. It provides a user interface for managing comments directly in the editor.
+
+# Creating Wisemark Comments
+
+A comment can be as simple as:
+
+```ts
+// @<type> <message>
+```
+
+```ts title="Example.ts"
+// @todo Add a test for negative numbers
+// @fixme Fix the bug in the code
+// @note This is a note
+// @question What if the numbers are negative?
+// @refactor Refactor this function
+```
+
+Some optional parameters can be added to the comment:
+
+- severity: low, medium, high
+- tags: any string separated by commas
+- author: the author of the comment
+- due: the due date of the comment (YYYY-MM-DD)
+- id: A unique name for the comment (its generated automatically but you can override it)
+
+Structure of the comment:
+
+````ts
+// @<type> <message> -- severity: <severity> -- tags: <tags> -- author: <author> -- due: <due> -- id: <id>
+```
+
+```ts title="Example.ts"
+// @todo Add a test for negative numbers -- severity: high -- tags: bug, urgent -- author: Pol Gubau -- due: 2023-10-01 -- id: test-negative-numbers
+
+// @fixme Fix the bug in the code -- severity: medium -- tags: bug,correct
+````
+
+# CLI Tool
+
+Wisemark CLI is a command-line tool that allows you to manage your comments directly from the terminal. It provides commands for scanning your codebase, generating reports, and managing your TODOs and FIXMEs. (Report generation is not yet implemented)
+
+### Remote or Local Installation
+
+#### Remote Run
+
+If you don't want to install Wisemark in you computer just run the following command in your terminal:
+
+```bash
+npx @wisemark/cli
+```
+
+#### Local Installation
+
+You can install Wisemark CLI globally using npm:
+
+```bash
+npm install -g @wisemark/cli
+```
+
+### Usage
+
+Once installed, you can use the following commands:
+
+#### Scan Wisemark Commands
+
+This command scans your codebase for Wisemark comments and generates a report of all the TODOs, FIXMEs, and other comments.
+Can be triggered with the default command `wisemark` or `wisemark scan`.
+
+```bash
+wisemark [options]
+```
+
+```bash
+wisemark lint [options]
+```
+
+#### Options
+
+For these both commands you can use the following options:
+
+    The optional options are:
+
+- `--type`: Filter by type (todo, note, fixme)
+- `--path`: Inner path of the project to scan (default: `.`)
+- `--severity`: Filter by severity (low, medium, high)
+- `--json`: Return output in JSON format
+- `--table`: Return output in table format
+- `--showDate`: Show the date of the comment
+- `--withDueDate`: Return only comments with a due date
+- `--due`: Filter by due date (YYYY-MM-DD)
+- `--tags`: Filter by tags (comma separated)
+- `--cwd`: Path to the project (default: current working directory)
+- `--help`: Show help information
+- `--version`: Show version information
+
+A full example of the command would be:
+
+```bash
+wisemark --type todo --path src --severity high --json --showDate --withDueDate --due 2023-10-01 --tags bug,urgent
+```
+
+# VSCode Extension
 
 Wisemark is a VSCode extension that helps you manage and scan intelligent commands within your codebase. It enables easy insertion of different types of comments (like TODO, FIXME, Notes, Questions, Refactors) and allows you to quickly navigate and manage these comments. It also provides enhanced token coloring and grouping options for better code organization.
 
@@ -121,6 +228,21 @@ For even faster insertion of comments, use the **Quick Pick** functionality, whi
 Easily group your comments by type for better organization.
 
 ![Group Comments](https://github.com/PolGubau/wisemark/blob/readme-update/packages/vscode/public/typeGroup.png?raw=true)
+
+# Roadmap
+
+| Feature             | Status | Description                                                                  |
+| ------------------- | ------ | ---------------------------------------------------------------------------- |
+| Core Functionality  | ✅     | Basic functionality for managing comments.                                   |
+| CLI Tool            | ✅     | Command-line interface for running Wisemark commands (Scan + due date lint). |
+| VSCode Extension    | ✅     | VSCode extension for managing comments directly in the editor.               |
+| Grouping            | ✅     | Group comments by type for better organization.                              |
+| Color Customization | ✅     | Customize colors for different comment types.                                |
+| Predictive Features | ✅     | Predict the most used comments based on previous usage.                      |
+| Quick Pick          | ✅     | Suggest the best options for your current task.                              |
+| Report Generation   | 🟧     | Generate reports of your comments.                                           |
+| Overdue Linting     | 🟧     | Fail pipelines if you have overdue comments.                                 |
+| Customizable Rules  | 🟧     | Allow users to define their own rules for comments. (wisemark.config.ts)     |
 
 ## Contributing
 
