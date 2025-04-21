@@ -24,20 +24,19 @@
   "publishConfig": {
     "access": "public"
   },
-
   "keywords": [
     "wisemark",
     "core",
-    "typescript"  ],
+    "typescript"
+  ],
   "author": "Pol Gubau Amores",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@types/node": "^22.14.1",
     "tsup": "8.4.0",
+    "fast-glob": "^3.3.3",
     "vitest": "^3.1.1"
   },
-  "dependencies": {
-    "fast-glob": "^3.3.3"
-  }
+  "dependencies": {}
 }
