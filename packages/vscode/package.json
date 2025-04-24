@@ -10,17 +10,15 @@
 	"categories": [
 		"Keymaps",
 		"Debuggers",
-		"Snippets",
-		"Other"
+		"Snippets"
 	],
 	"activationEvents": [
-		"onView:wisemark.commentExplorer",
-		"onStartupFinished"
+		"onView:wisemark.commentExplorer"
 	],
 	"main": "./dist/extension.js",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/PolGubau/markwise",
+		"url": "https://github.com/PolGubau/wisemark",
 		"directory": "packages/vscode"
 	},
 	"publisher": "polgubauamores",
@@ -104,6 +102,13 @@
 					"group": "2_wisemark",
 					"title": "Wisemark 🧠",
 					"icon": "$(comment-discussion)"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "wisemark.scan",
+					"when": "true",
+					"group": "navigation"
 				}
 			]
 		},
