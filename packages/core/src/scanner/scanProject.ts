@@ -1,45 +1,57 @@
-import fg from "fast-glob";
-import { readFile } from "node:fs/promises";
+// src/utils/scanProject.ts
+import { readdir, readFile } from "node:fs/promises";
+import { join, extname } from "node:path";
 import { scanFile } from "./scanFile";
 import type { Comment, ScanProjectOptions } from "../types";
- 
+
 const defaultExtensions = ["ts", "tsx", "js", "jsx", "mjs", "cjs"];
-const defaultIgnore = ["node_modules", "dist", "build", "**/*.d.ts"];
-
-
+const defaultIgnore = ["node_modules", "dist", "build"];
 const defaultOptions: ScanProjectOptions = {
-	extensions:  defaultExtensions,
+	extensions: defaultExtensions,
 	ignore: defaultIgnore,
 };
 
+/**
+ * Recursively reads directory and returns files matching the extensions and not ignored.
+ */
+async function getFiles(
+	dir: string,
+	extensions: string[],
+	ignore: string[],
+): Promise<string[]> {
+	const entries = await readdir(dir, { withFileTypes: true });
+
+	const files: string[] = [];
+
+	for (const entry of entries) {
+		const fullPath = join(dir, entry.name);
+		if (ignore.some((pattern) => fullPath.includes(pattern))) continue;
+
+		if (entry.isDirectory()) {
+			files.push(...(await getFiles(fullPath, extensions, ignore)));
+		} else if (extensions.includes(extname(entry.name).slice(1))) {
+			files.push(fullPath);
+		}
+	}
+
+	return files;
+}
 
 /**
  * Scans a project directory for comments in files with specified extensions.
- * 
+ *
  * @param basePath - The root directory path to scan
  * @param options - Configuration options for the scan
- * @param options.extensions - File extensions to include in the scan
- * @param options.ignore - Patterns to ignore during scanning
  * @returns A Promise that resolves to an array of Comment objects found in the project
- * 
- * @example
- * ```ts
- * const comments = await scanProject('./src', { 
- *   extensions: ['ts', 'js'], 
- *   ignore: ['node_modules/**'] 
- * });
- * ```
  */
-export async function scanProject(basePath: string, options: ScanProjectOptions = defaultOptions): Promise<Comment[]> {
+export async function scanProject(
+	basePath: string,
+	options: ScanProjectOptions = defaultOptions,
+): Promise<Comment[]> {
+	const extensionsToSearch = options.extensions ?? defaultExtensions;
+	const ignorePatterns = options.ignore ?? defaultIgnore;
 
-const extensionsToSearch = options.extensions ?? defaultExtensions;
-	const ignorePatterns = options.ignore ?? defaultIgnore; 
-
- 	const files = await fg(`**/*.{${extensionsToSearch.join(",")}}`, {
-		cwd: basePath,
-		ignore: ignorePatterns,
-		absolute: true,
-	});
+	const files = await getFiles(basePath, extensionsToSearch, ignorePatterns);
 
 	const allComments = await Promise.all(
 		files.map(async (file) => {

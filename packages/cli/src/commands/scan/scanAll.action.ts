@@ -8,8 +8,8 @@ export async function scanAll(options: ScanFlags) {
 
 	const { comments, metadata } = await listAndFilter(options);
 
+// @note test
 
-	if (options.json) {
 		// delete the fields that are undefined
 		const parsedMessages: Partial<Comment>[] = comments.map((comment) => {
 			return Object.fromEntries(
@@ -22,6 +22,8 @@ export async function scanAll(options: ScanFlags) {
 		};
 		console.log(JSON.stringify(res, null, 2));
 	} else {
-		printResults(comments, metadata.time.milliseconds, { table: options.table });
+		printResults(comments, metadata.time.milliseconds, {
+			table: options.table,
+		});
 	}
 }

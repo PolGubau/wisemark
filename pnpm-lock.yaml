@@ -54,9 +54,6 @@ importers:
       '@types/node':
         specifier: ^22.14.1
         version: 22.14.1
-      fast-glob:
-        specifier: ^3.3.3
-        version: 3.3.3
       tsup:
         specifier: 8.4.0
         version: 8.4.0(postcss@8.5.3)(typescript@5.8.2)(yaml@2.7.1)
