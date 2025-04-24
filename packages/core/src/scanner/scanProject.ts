@@ -3,9 +3,9 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, extname } from "node:path";
 import { scanFile } from "./scanFile";
 import type { Comment, ScanProjectOptions } from "../types";
+import { defaultIgnore } from "./options";
 
 const defaultExtensions = ["ts", "tsx", "js", "jsx", "mjs", "cjs"];
-const defaultIgnore = ["node_modules", "dist", "build"];
 const defaultOptions: ScanProjectOptions = {
 	extensions: defaultExtensions,
 	ignore: defaultIgnore,
