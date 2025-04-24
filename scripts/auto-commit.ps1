@@ -2,7 +2,6 @@ param(
     [string]$Fecha,
     [string]$Mensaje = "Commit para llenar el verde de GitHub"
 )
-
 # Verifica que se haya proporcionado la fecha
 if (-not $Fecha) {
     Write-Host "Debes proporcionar la fecha en formato 'YYYY-MM-DD'."
