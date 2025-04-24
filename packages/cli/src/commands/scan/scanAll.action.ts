@@ -1,15 +1,13 @@
 import { printResults } from "../../utils/printer";
- import { validateParams } from "./validate";
+import { validateParams } from "./validate";
 import { listAndFilter, type ScanFlags } from "@wisemark/core";
- 
 
 export async function scanAll(options: ScanFlags) {
 	validateParams(options);
 
 	const { comments, metadata } = await listAndFilter(options);
 
-// @note test
-
+	if (options.json) {
 		// delete the fields that are undefined
 		const parsedMessages: Partial<Comment>[] = comments.map((comment) => {
 			return Object.fromEntries(
