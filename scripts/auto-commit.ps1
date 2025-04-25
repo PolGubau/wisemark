@@ -22,8 +22,8 @@ git add .
 git commit -m $Mensaje
 
 # Modifica la fecha del commit para que coincida con el día indicado
-$env:GIT_AUTHOR_DATE = "$Fecha 12:00:00"
-$env:GIT_COMMITTER_DATE = "$Fecha 12:00:00"
+$env:GIT_AUTHOR_DATE = "$Fecha 09:00:00"
+$env:GIT_COMMITTER_DATE = "$Fecha 09:00:00"
 
 # Modifica el último commit
 git commit --amend --no-edit
