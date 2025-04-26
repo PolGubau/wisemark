@@ -33,7 +33,6 @@ async function main() {
  */
 const esbuildProblemMatcherPlugin = {
 	name: "esbuild-problem-matcher",
-
 	setup(build) {
 		build.onStart(() => {
 			console.log("[watch] build started");
@@ -48,7 +47,6 @@ const esbuildProblemMatcherPlugin = {
 				}
 			});
 			console.log("[watch] build finished");
-		
 	},
 };
 
