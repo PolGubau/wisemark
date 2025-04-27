@@ -16,6 +16,7 @@ export function printResults(
 		console.log(pc.green(`✅ No wisemark comments found in ${milliseconds}ms`));
 		return;
 	}
+
 	if (options?.table) {
 		printCommentsAsTable(comments);
 	} else {
