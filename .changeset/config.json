@@ -1,9 +1,14 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": "@changesets/cli/changelog",
-  "commit": true,
-  "fixed": [],
-  "linked": [],
+  "commit": false,
+  "linked": [
+    [
+      "core",
+      "cli",
+      "vscode-extension"
+    ]
+  ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

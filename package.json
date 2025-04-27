@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "keywords": [
     "typescript",
@@ -26,6 +26,10 @@
     "dev": "pnpm run /^dev:.*/",
     "release": "changeset publish",
     "build": "pnpm -r build",
+    "commit": "cz",
+    "new:changeset": "changeset",
+    "version": "changeset version",
+    "publish": "changeset publish",
     "prepare": "husky install"
   },
   "repository": {
@@ -37,10 +41,17 @@
   "bugs": {
     "url": "https://github.com/PolGubau/fuzzy/issues"
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
   "homepage": "https://github.com/PolGubau/fuzzy#readme",
   "description": "",
   "devDependencies": {
     "@changesets/cli": "^2.29.1",
+    "commitizen": "^4.3.1",
+    "cz-conventional": "^0.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0"
   }
