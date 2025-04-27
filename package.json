@@ -21,16 +21,21 @@
   "contributors": [
     "Pol Gubau Amores <gubaupol@gmail.com> (https://polgubau.com)"
   ],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "vitest",
     "dev": "pnpm run /^dev:.*/",
-    "release": "changeset publish",
     "build": "pnpm -r build",
     "commit": "cz",
     "new:changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm run version-packages && pnpm publish -r --access public"
   },
   "repository": {
     "type": "git",
