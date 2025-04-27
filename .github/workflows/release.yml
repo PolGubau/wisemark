@@ -27,9 +27,13 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm install
-
+      - name: Create changeset automatically if needed
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep '^packages/'; then
+            echo 'Creating changeset...'
+            pnpm exec changeset --empty
+          fi
       - run: pnpm exec changeset version
-
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -40,11 +44,6 @@ jobs:
       - run: pnpm publish -r --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-
-
-
-
 # name: Release
 
 # on:
@@ -52,11 +51,9 @@ jobs:
 #     branches: [main]
 
 # permissions:
-#   contents: write 
+#   contents: write
 #   pull-requests: write
 #   packages: write
-
-
 
 # jobs:
 #   release:
@@ -97,7 +94,7 @@ jobs:
 #         with:
 #           publish: pnpm release
 #         env:
-#           GITHUB_TOKEN: ${{ secrets.GH_TOKEN  }}  
+#           GITHUB_TOKEN: ${{ secrets.GH_TOKEN  }}
 #           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 #           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
- 
+
