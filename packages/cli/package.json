@@ -1,7 +1,7 @@
 {
   "name": "@wisemark/cli",
   "displayName": "Wisemark CLI",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "bin": {
     "wisemark": "./dist/bin.js",
     "wmk": "./dist/bin.js"
