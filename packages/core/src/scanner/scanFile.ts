@@ -8,10 +8,19 @@ const extractField = (raw: string, key: string): string | undefined => {
 const extractTags = (raw: string): string[] =>
 	extractField(raw, "tags")?.split(",") ?? [];
 
-export function scanFile(
-	content: string,
-	path = "unknown",
-): Comment[] {
+/**
+ * Scans the provided file content for comments matching specific patterns and extracts structured comment data.
+ *
+ * @param content - The content of the file to scan.
+ * @param path - The path of the file being scanned. Defaults to "unknown".
+ * @returns An array of `Comment` objects representing the extracted comments.
+ *
+ * @remarks
+ * This function splits the file content into lines and applies a set of regular expressions (defined in `typesRegex`)
+ * to each line to identify and extract comments. For each matched comment, it parses metadata such as `id`, `severity`,
+ * `tags`, `author`, and `due` using helper functions. The extracted comments are returned as an array of `Comment` objects.
+ */
+export function scanFile(content: string, path = "unknown"): Comment[] {
 	const lines = content.split("\n");
 	const comments: Comment[] = [];
 
