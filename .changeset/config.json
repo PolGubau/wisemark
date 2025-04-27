@@ -2,11 +2,11 @@
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "linked": [
+  "fixed": [
     [
-      "core",
-      "cli",
-      "vscode-extension"
+      "@wisemark/core",
+      "@wisemark/cli",
+      "wisemark"
     ]
   ],
   "access": "public",
